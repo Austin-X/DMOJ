@@ -1,42 +1,42 @@
 import java.util.*;
 
 public class CanShahirEvenGetThere {
-	static int vertices, edges, a, b;
-	static ArrayList<ArrayList<Integer>> adj = new ArrayList<ArrayList<Integer>>();
-	static boolean visited[];
-	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		vertices = sc.nextInt();
-		edges = sc.nextInt();
-		a = sc.nextInt() - 1;
-		b = sc.nextInt() - 1;
-		visited = new boolean[vertices];
+		int n = sc.nextInt();
+		int m = sc.nextInt();
+		int a = sc.nextInt();
+		int b = sc.nextInt();
+		Queue <Integer> queue = new LinkedList<Integer>();
 		
-		for (int i = 0; i < vertices; i ++) {
-			adj.add(new ArrayList<Integer>());
-		}
-		for (int i = 0; i < edges; i ++) {
-			int x = sc.nextInt() - 1;
-			int y = sc.nextInt() - 1;
-			adj.get(x).add(y);
-			adj.get(y).add(x);
+		// Visited boolean array defaults to false, adjency matrix defaults to 0
+		boolean[] visited = new boolean[n + 1];
+		int adj[][]  = new int[n + 1][n + 1];
+		
+		for (int i = 0; i < m; i ++) {
+			int x = sc.nextInt();
+			int y = sc.nextInt();
+			
+			// Undirected graph so it is symmetrical
+			adj[x][y] = 1;
+			adj[y][x] = 1;
 		}
 		
-		if (dfs(a)) System.out.println("GO SHAHIR!");
-		else System.out.println("NO SHAHIR!");
-	}
-	
-	static boolean dfs(int u) {
-		visited[u] = true;
-		if (b == u) {
-			return true;
-		}
-		for (int x : adj.get(u)) {
-			if (!visited[x] && dfs(x)) {
-				return true;
+		queue.add(a);
+		visited[a] = true;
+		
+		// Performing bfs
+		while(!queue.isEmpty()) {
+			int value = queue.poll();
+			for (int i = 1; i <= n; i ++) {
+				if (!visited[i] && adj[value][i] == 1) {
+					visited[i] = true;
+					queue.add(i);
+				}
 			}
 		}
-		return false;
+		
+		if (visited[b]) System.out.println("GO SHAHIR!");
+		else System.out.println("NO SHAHIR!");
 	}
 }
