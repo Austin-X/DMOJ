@@ -1,53 +1,54 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class BreadthFirstNotQuiteTree {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		for (int times = 0; times < 5; times ++) {
-			int ids = Integer.parseInt(br.readLine()), cn = 0;
+		StringTokenizer st;
+		
+		for (int a = 0; a < 5; a ++) {
+			int n = Integer.parseInt(br.readLine());
 			
 			@SuppressWarnings("unchecked")
 			ArrayList<Integer>[] adj = new ArrayList[101];
-
-			for (int i = 1; i <= 100; i++) {
-				adj[i] = new ArrayList<>();
-			}
-			for (int i = 0; i < ids; i++) {
-				StringTokenizer st = new StringTokenizer(br.readLine());
+			
+			for (int i = 0; i < 101; i ++) adj[i] = new ArrayList<Integer>();
+			
+			for (int i = 0; i < n; i ++) {
+				st = new StringTokenizer(br.readLine());
 				int x = Integer.parseInt(st.nextToken());
 				int y = Integer.parseInt(st.nextToken());
 				adj[x].add(y);
 				adj[y].add(x);
 			}
-
-			int[] dis = new int[101];
-			Arrays.fill(dis, -1);
+			
+			int[] dis = new int[101]; 
 			dis[1] = 0;
+			boolean[] visited = new boolean[101];
+			visited[1] = true;
 			Queue<Integer> queue = new LinkedList<Integer>();
 			queue.add(1);
-
-			// Starting the bfs
+			
 			while (!queue.isEmpty()) {
 				int cur = queue.poll();
 				for (int x : adj[cur]) {
-					if (dis[x] == -1) {
+					if (!visited[x]) {
+						visited[x] = true;
 						dis[x] = dis[cur] + 1;
 						queue.add(x);
 					}
 				}
 			}
-
-			for (int i = 1; i <= 100; i++) {
+			
+			int sameLevelEdges = 0;
+			for (int i = 1; i < 101; i ++) {
 				for (int x : adj[i]) {
-					if (dis[x] == dis[i]) {
-						cn ++;
-					}
+					if (dis[i] == dis[x]) sameLevelEdges ++;
 				}
 			}
 			
-			// Dividing by two because this is an undirected graph
-			System.out.println(cn / 2);
+			// The 'divided by 2' comes from the fact that this graph is undirected
+			System.out.println(sameLevelEdges / 2);
 		}
 	}
 }
