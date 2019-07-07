@@ -25,6 +25,7 @@ public class TSSClubFair2017ProblemB {
 			
 			int low = 0, high = n - 1;
 			
+			// Binary Search
 			while (low <= high) {
 				int mid = (low + high) / 2;
 				if (houses[mid] <= range) {
