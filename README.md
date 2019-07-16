@@ -1,2 +1,2 @@
 # DMOJ
-where I post my DMOJ solutions
+Where I post my DMOJ solutions
