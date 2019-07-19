@@ -8,34 +8,30 @@ public class ZenGarden {
 		
 		int n = Integer.parseInt(br.readLine());
 		int[] flowers = new int[n];
-		int[] disturbances = new int[n - 1];
+		int[] distur = new int[n - 1];
 		
-		st = new StringTokenizer(br.readLine());
+		st = new StringTokenizer(br.readLine());	
 		for (int i = 0; i < n; i ++) flowers[i] = Integer.parseInt(st.nextToken());
 		
 		int m = Integer.parseInt(br.readLine());
 		for (int i = 0; i < m; i ++) {
 			st = new StringTokenizer(br.readLine());
-			int a = Integer.parseInt(st.nextToken());
+			int a = Integer.parseInt(st.nextToken()) - 1;
 			int d = Integer.parseInt(st.nextToken());
-			disturbances[a - 1] = d;
+			distur[a] = d;
 		}
-		
-		for (int i = 1; i < n; i ++) {
-			if (flowers[i] < disturbances[i - 1] || flowers[i - 1] < disturbances[i - 1]) {
-				if (flowers[i] < flowers[i - 1]) {
-					flowers[i] = 0;
-				} else {
-					flowers[i - 1] = 0;
-				}
+
+		for (int i = 0; i < n - 1; i ++) {
+			if (flowers[i] < distur[i] || flowers[i + 1] < distur[i]) {
+				if (flowers[i] < flowers[i + 1]) flowers[i] = 0;
+				else flowers[i + 1] = 0;
 			} else {
-				flowers[i] -= disturbances[i - 1];
+				flowers[i] -= distur[i];
 			}
 		}
-		
-		int sum = 0;
-		for (int x : flowers) sum += x;
-		
-		System.out.println(sum);
+				
+		int ans = 0;
+		for (int x : flowers) ans += x;
+		System.out.println(ans);
 	}
 }
