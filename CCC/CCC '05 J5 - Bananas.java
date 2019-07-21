@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.*;
 
 public class Bananas {
 	static int bCn = 0;
