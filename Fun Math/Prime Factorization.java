@@ -11,8 +11,9 @@ public class PrimeFactorization {
 			
 			while (m % 2 == 0) {
 				System.out.print(2 + " ");
-				m /= 2;
+				m >>= 1;
 			}
+			
 			for (int i = 3; i <= Math.sqrt(m); i += 2) {
 				while (m % i == 0) {
 					System.out.print(i + " ");
@@ -20,7 +21,7 @@ public class PrimeFactorization {
 				}
 			}
 			
-			if (m > 2) System.out.print(m + " ");
+			if (m > 2) System.out.print(m);
 			System.out.println();
 		}
 	}
