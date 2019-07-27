@@ -15,7 +15,7 @@ public class SumOfPrimes {
 				}
 			}
 		}
-		prime[0] = false; prime[1] = false; prime[2] = false;
+		prime[0] = prime[1] = prime[2] = false;
 		
 		int cn = 0;
 		for (int i = 3; i < 10000000; i += 2) {
@@ -48,43 +48,41 @@ public class SumOfPrimes {
 		int upperBound = Arrays.binarySearch(arr, n);
 		if (upperBound < 0) upperBound = -(upperBound) - 2;
 		
-		for (int i = 0; i <= upperBound; i ++) {
-			if (primes[i] == n) {
-				System.out.print(primes[i]); return;
-			}
+		if (prime[n]) {
+			System.out.print(n); return;
 		}
-
-		boolean bool = false;
-		for (int i = 0; i <= upperBound; i ++) {
-			if (primes[i] > n / 2) break;
-			if (prime[n - primes[i]]) {
-				a = primes[i]; b = n - primes[i]; bool = true;
+		
+		if (n % 2 == 0) {
+			for (int i = 0; i <= upperBound; i ++) {
+				if (primes[i] > n / 2) break;
+				if (prime[n - primes[i]]) {
+					a = primes[i]; b = n - primes[i]; 
+				}
 			}
-		}
-		if (bool) {
+			
 			System.out.print(a + " + " + b); return;
-		}
-
-		ans = new ArrayList<Integer>(); diff = new ArrayList<Integer>();
-		
-		for (int i = 0; i <= upperBound; i ++) {
-			if (primes[i] * 3 > n) {
-				break;
-			} else {
-				ans.add(primes[i]);
-				diff.add(n - primes[i] * 3);
-				a = primes[i];
-			}
-		}	
-		
-		for (int i = diff.size() - 1; i >= 0; i --) {
-			for (int j = diff.get(i) / 2; j >= 0; j --) {
-				if (ans.get(i) - j + diff.get(i) < 10000000 && ans.get(i) + j < 10000000) {
-					if (prime[ans.get(i) + j] && prime[ans.get(i) - j + diff.get(i)]) {
-						a = ans.get(i);
-						b = ans.get(i) + j;
-						c = ans.get(i) - j + diff.get(i);
-						System.out.print(a + " + " + b + " + " + c); return;
+		} else {
+			ans = new ArrayList<Integer>(); diff = new ArrayList<Integer>();
+			
+			for (int i = 0; i <= upperBound; i ++) {
+				if (primes[i] * 3 > n) {
+					break;
+				} else {
+					ans.add(primes[i]);
+					diff.add(n - primes[i] * 3);
+					a = primes[i];
+				}
+			}	
+			
+			for (int i = diff.size() - 1; i >= 0; i --) {
+				for (int j = diff.get(i) / 2; j >= 0; j --) {
+					if (ans.get(i) - j + diff.get(i) < 10000000 && ans.get(i) + j < 10000000) {
+						if (prime[ans.get(i) + j] && prime[ans.get(i) - j + diff.get(i)]) {
+							a = ans.get(i);
+							b = ans.get(i) + j;
+							c = ans.get(i) - j + diff.get(i);
+							System.out.print(a + " + " + b + " + " + c); return;
+						}
 					}
 				}
 			}
