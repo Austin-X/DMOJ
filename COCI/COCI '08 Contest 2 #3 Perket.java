@@ -19,16 +19,13 @@ public class Perket {
 			bitterness[i] = Integer.parseInt(st.nextToken());
 		}
 		
-		int ans = Integer.MAX_VALUE;
-		for (int i = 0; i < n; i ++) {
-			ans = Math.min(ans, recurse(1, 0, i));
-		}
-		System.out.println(ans);
+		System.out.println(recurse(1, 0, 0));
 	}
 	
 	static int recurse(int sour, int bitter, int idx) {
 		for (int i = idx + 1; i < n; i ++) {
 			recurse (sour * sourness[idx], bitter + bitterness[idx], i);
+			recurse (1, 0, i);
 		}
 		
 		min = Math.min(min, Math.abs(sour * sourness[idx] - (bitter + bitterness[idx])));
