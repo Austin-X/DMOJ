@@ -2,8 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class DisjointSetTest {
-	static int[] parent;
-	static int[] rank;
+	static int[] parent, rank;
 	static ArrayList<Integer> out = new ArrayList<Integer>();
 	
 	static int find(int x) {
@@ -45,13 +44,9 @@ public class DisjointSetTest {
 		}
 		
 		boolean disconnected = false;
-		for (int i = 2; i <= n; i ++) {
-			if (find(i) != find(i - 1)) { disconnected = true; break; }
-		}
+		for (int i = 2; i <= n; i ++) if (find(i) != find(i - 1)) { disconnected = true; break; }
 		
-		if (!disconnected) {
-			for (int x : out) System.out.println(x);
-		}
+		if (!disconnected) for (int x : out) System.out.println(x);
 		else System.out.println("Disconnected Graph");
 	}
 }
