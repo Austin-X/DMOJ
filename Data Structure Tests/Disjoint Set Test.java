@@ -42,11 +42,8 @@ public class DisjointSetTest {
 			
 			union(x, y, i);
 		}
-		
-		boolean disconnected = false;
-		for (int i = 2; i <= n; i ++) if (find(i) != find(i - 1)) { disconnected = true; break; }
-		
-		if (!disconnected) for (int x : out) System.out.println(x);
+
+		if (out.size() == n - 1) for (int x : out) System.out.println(x);
 		else System.out.println("Disconnected Graph");
 	}
 }
