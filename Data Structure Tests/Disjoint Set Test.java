@@ -14,6 +14,8 @@ public class DisjointSetTest {
 		int xRoot = find(x);
 		int yRoot = find(y);
 		
+		if (xRoot == yRoot) return;
+		
 		if (rank[xRoot] < rank[yRoot]) parent[xRoot] = yRoot;
 		else if (rank[xRoot] > rank[yRoot]) parent[yRoot] = xRoot;
 		else {
@@ -21,7 +23,7 @@ public class DisjointSetTest {
 			rank[yRoot] ++;
 		}
 		
-		if (xRoot != yRoot) out.add(idx);
+		out.add(idx);
 	}
 	
 	public static void main(String[] args) throws IOException {
