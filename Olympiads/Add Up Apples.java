@@ -1,42 +1,45 @@
 import java.io.*;
+import java.util.*;
 
 public class AddUpApples {
-	public static int cn = 0;
+	static int n;
+	static HashSet<ArrayList<Integer>> check = new HashSet<ArrayList<Integer>>();
+	static ArrayList<Integer> temp = new ArrayList<Integer>();
 	
-	// Recursive function to print out all combinations that add up to a given number
-	static void combinations(int[] arr, int index, int num, int reducedNum) {
-		
-		if (reducedNum < 0) return;
-		
-		if (reducedNum == 0 && arr[0] != num) {
-			System.out.print(num + "=");
-			for (int i = 0; i < index; i++) {
-				if (i != index - 1) System.out.print(arr[i] + "+");
-				else System.out.print(arr[i]);
-			}
-			System.out.println();
-			cn ++;
-			return;
-		}
-		else if (reducedNum == 0 && arr[0] == num) {
-			System.out.println("total=" + cn);
-		}
-
-		int prev = (index == 0) ? 1 : arr[index - 1];
-		
-		for (int i = prev; i <= num; i ++) {
-			arr[index] = i;
-			combinations(arr, index + 1, num, reducedNum - i);
-		}
-	}
-
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int n = Integer.parseInt(br.readLine());
+		n = Integer.parseInt(br.readLine());
 		
 		if (n != 1) {
-			int[] array = new int[n];
-			combinations(array, 0, n, n);
-		} else System.out.println("total=0");
+			recurse(1, 0);
+			for (ArrayList<Integer> x : check) {
+				System.out.print(n + "=");
+				for (int j = 0; j < x.size(); j ++) {
+					if (j == x.size() - 1) System.out.println(x.get(j));
+					else System.out.print(x.get(j) + "+");
+				}
+			}
+			System.out.println("total=" + check.size());
+		}
+		else System.out.println("total=0");
+	}
+	
+	static void recurse(int idx, int sum) {
+		if (sum > n) return;
+		else if (sum == n) {	
+			if (temp.get(0) != n) check.add(new ArrayList<Integer>(temp));
+			return;
+		}
+		
+		for (int i = idx; i <= n/2; i ++) {
+			temp.add(i);
+			recurse(i, sum + i);
+			
+			temp.remove(temp.size() - 1);
+			temp.add(n - i);
+			recurse(n - i, sum + (n - i));
+			
+			temp.remove(temp.size() - 1);
+		}
 	}
 }
