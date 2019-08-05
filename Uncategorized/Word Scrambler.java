@@ -29,7 +29,7 @@ public class WordScrambler {
 			if (!temp.contains(chars[i])) {
 				temp.add(chars[i]);
 				permute();
-				temp.remove(temp.get(temp.size() - 1));
+				temp.remove(temp.size() - 1);
 			}
 		}
 	}
