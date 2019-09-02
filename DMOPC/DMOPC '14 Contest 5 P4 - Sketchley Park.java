@@ -27,7 +27,7 @@ public class SketchleyPark {
 				char[] key = br.readLine().toCharArray();
 				
 				str = "";
-				str += key[7]; str += key[0]; str +=key[8]; str +=key[11]; str +=key[24]; str +=key[3]; str +=key[17];
+				str += key[7]; str += key[0]; str += key[8]; str += key[11]; str +=key[24]; str += key[3]; str += key[17];
 				
 				if (possible.contains(str)) {
 					HashMap<Character, Character> map = new HashMap<Character, Character>();
