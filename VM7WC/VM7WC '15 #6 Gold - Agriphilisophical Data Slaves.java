@@ -34,7 +34,7 @@ public class AgriphilisophicalDataSlaves {
 		}
 		
 		for (int i = 1; i <= n; i ++) {
-			if (!visited[i]) recurse(i, 0); 
+			if (!visited[i]) recurse(i); 
 		}
 		
 		int max = -Integer.MAX_VALUE;
@@ -42,12 +42,12 @@ public class AgriphilisophicalDataSlaves {
 		System.out.println(max);
 	}
 	
-	static void recurse(int x, int curValue) {
+	static void recurse(int x) {
 		visited[x] = true;
 		arr.push(x);
 		for (int u : adj[x]) {
 			if (!visited[u]) {
-				recurse(u, curValue);
+				recurse(u);
 				for (int i : arr) cn[i] += characters[u];
 			}
 		}
