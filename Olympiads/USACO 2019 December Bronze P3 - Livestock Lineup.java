@@ -40,9 +40,8 @@ public class LivestockLineup {
 			}
 			
 			while (!adj[idx].isEmpty()) {
-				for (String x : adj[idx]) {
-					System.out.println(x); vis[order.indexOf(x)] = true; idx = order.indexOf(x); str = x;
-				}
+				str = adj[idx].get(0);
+				System.out.println(str); vis[order.indexOf(str)] = true; idx = order.indexOf(str);
 				
 				for (int i = 0; i < 8; i ++) {
 					if (adj[i].contains(str)) adj[i].remove(adj[i].indexOf(str));
