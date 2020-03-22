@@ -4,9 +4,22 @@ public class GreatGraffiti {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String str = br.readLine();
-        if (str.contains("DMOJ")) System.out.println(0);
-        else if (str.contains("DOJ") || str.contains("DMO") || str.contains("DMJ") || str.contains("MOJ")) System.out.println(1);
-        else if (str.contains("DM") || str.contains("DO") || str.contains("DJ") || str.contains("MO") || str.contains("MJ") || str.contains("OJ")) System.out.println(2);
-        else System.out.println(3);
+        int best = 1;
+        char[] ch = {'D', 'M', 'O', 'J'};
+       
+        int idx = -1, temp = 0, cur;
+        for (int i = 0; i < str.length(); i ++) {
+        	cur = idx;
+
+            for (int j = 0; j < 4; j ++) {
+            	if (ch[j] == str.charAt(i)) { idx = j; break; }
+            }
+
+            if (idx <= cur) { best = Math.max(best, temp); temp = 1; }
+            else temp ++;
+        }
+        best = Math.max(best, temp);
+
+        System.out.println(4 - best);
     }
 }
