@@ -2,16 +2,12 @@ import java.io.*;
 import java.util.*;
 
 public class SummingASequence {
-	static int[] nums;
-	static long[] dp;
-	static int n;
-	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
-		n = Integer.parseInt(br.readLine());
-		nums = new int[n];
-		dp = new long[n];
+		int n = Integer.parseInt(br.readLine());
+		int[] nums = new int[n];
+		long[] dp = new long[n];
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < n; i ++) nums[i] = Integer.parseInt(st.nextToken());
 		
