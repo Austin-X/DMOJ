@@ -1,3 +1,5 @@
+package uncategorized;
+
 import java.io.*;
 import java.util.*;
 
@@ -7,8 +9,8 @@ public class SquirrelElection {
 		StringTokenizer st;
 		
 		int n = Integer.parseInt(br.readLine());
-	    int[] v = new int[n + 1], p = new int[n + 1];
-	    int sum = 0;
+	        int[] v = new int[n + 1], p = new int[n + 1];
+	        int sum = 0;
 		
 		for (int i = 1; i <= n; i ++) {
 			st = new StringTokenizer(br.readLine());
