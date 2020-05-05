@@ -9,7 +9,7 @@ public class MrNAndPresents {
 		int q = Integer.parseInt(br.readLine());
 		ArrayList<Integer> arr = new ArrayList<Integer>();
 		
-		for (int i = 0; i < q; i ++ ) {
+		for (int i = 0; i < q; i ++) {
 			st = new StringTokenizer(br.readLine());
 			char choice = st.nextToken().charAt(0);
 			int x = Integer.parseInt(st.nextToken());
