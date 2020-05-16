@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.Arrays;
 
 public class LCS {
 	public static void main(String[] args) throws IOException {
