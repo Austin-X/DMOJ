@@ -26,13 +26,14 @@ public class CombiningRiceballs {
 					}
 					if (dp[j][j + i] != 0) continue;
 					
-					HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
-
-					for (int k = j; k <= j + i - 2; k ++) {
-						if (dp[j][k] != 0) map.put(dp[j][k], k);
-					}
-					for (int k = j + 2; k <= j + i; k ++) {
-						if (dp[k][j + i] != 0 && map.containsKey(dp[k][j + i]) && map.get(dp[k][j + i]) != -1 && map.get(dp[k][j + i]) <= k - 2 && dp[map.get(dp[k][j + i]) + 1][k - 1] != 0) dp[j][j + i] = dp[k][j + i] * 2 + dp[map.get(dp[k][j + i]) + 1][k - 1];
+					int low = j, high = j + i;
+					while (low <= high - 2) {
+						if (dp[j][low] < dp[high][j + i]) low ++;
+						else if (dp[j][low] > dp[high][j + i]) high --;
+						else {
+							if (dp[low + 1][high - 1] != 0) { dp[j][j + i] = dp[j][low] * 2 + dp[low + 1][high - 1]; break; }
+							else { low ++; high --; }
+						}
 					}
 				}
 			}
