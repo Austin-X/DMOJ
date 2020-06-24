@@ -1,0 +1,49 @@
+import java.io.*;
+import java.util.*;
+
+public class TrieExample {
+	static int ans;
+	
+	static class Trie {
+		HashMap<Character, Trie> children;
+		Trie() {
+			children = new HashMap<Character, Trie>();
+		}
+	}
+	
+	static void insert(String x, Trie root) {
+		int idx = -1;
+
+		Trie cur = root;
+		for (int i = 0; i < x.length(); i ++) {
+			if (!cur.children.containsKey(x.charAt(i))) {
+				cur.children.put(x.charAt(i), new Trie());
+				cur = cur.children.get(x.charAt(i));
+				if (idx == -1) idx = i + 1;
+			} else {
+				cur = cur.children.get(x.charAt(i));
+			}
+		}
+		
+		ans += idx == -1 ? x.length() : idx;
+	}
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int T = Integer.parseInt(br.readLine());
+		for (int t = 1; t <= T; t ++) {
+			int n = Integer.parseInt(br.readLine());
+			
+			Trie graph = new Trie();
+			ans = 0;
+			
+			for (int i = 0; i < n; i ++) {
+				String x = br.readLine();
+				insert(x, graph);
+			}
+			
+			System.out.println("Case #" + t + ": " + ans);
+		}
+	}
+}
