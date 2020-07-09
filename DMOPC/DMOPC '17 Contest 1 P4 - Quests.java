@@ -15,8 +15,7 @@ public class Quests {
 		
 		long[][] dp = new long[2][H + 1];
 		Arrays.fill(dp[0], -1);
-		Arrays.fill(dp[1], -1);
-		dp[0][0] = 0; dp[1][0] = 0;
+		dp[0][0] = 0;
 		
 		for (int i = 0; i < N; i ++) {
 			for (int j = H - h[i]; j >= 0; j --) {
