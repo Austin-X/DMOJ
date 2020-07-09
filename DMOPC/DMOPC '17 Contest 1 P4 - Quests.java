@@ -26,7 +26,7 @@ public class Quests {
 			}
 			for (int j = 0; j <= H; j ++) {
 				dp[0][j] = Math.max(dp[0][j], dp[1][j]);
-				if (dp[1][j] > 0) dp[1][j] = 0;
+				dp[1][j] = 0;
 			}
 		}
 
