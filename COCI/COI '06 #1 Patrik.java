@@ -20,7 +20,7 @@ public class Patrik {
 			}
 			int cnt = 0;
 			while (!s.isEmpty()) {
-				if (x == s.peek().val) { ans += s.peek().cnt; cnt = s.peek().cnt; s.pop(); }
+				if (x == s.peek().val) { ans += s.peek().cnt; cnt = s.pop().cnt; }
 				else { ans ++; break; }
 			}
 
