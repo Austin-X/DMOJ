@@ -23,7 +23,6 @@ public class Patrik {
 				if (x == s.peek().val) { ans += s.peek().cnt; cnt = s.pop().cnt; }
 				else { ans ++; break; }
 			}
-
 			s.push(new Node(x, cnt + 1));
 		}
 
