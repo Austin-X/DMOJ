@@ -2,6 +2,10 @@ import java.io.*;
 import java.util.*;
 
 public class AClassicProblem {
+	static class Pair {
+		int val, idx;
+		Pair (int val, int idx) { this.val = val; this.idx = idx; }
+	}
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
@@ -12,28 +16,20 @@ public class AClassicProblem {
 		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < n; i ++) arr[i] = Integer.parseInt(st.nextToken());
 		
-		long ans = n;
-		int low = 0, high = 1, max = Math.max(arr[0], arr[1]), min = Math.min(arr[0], arr[1]);
-		
-		while (high < n) {
-			if (low == high) {
-				high ++;
-				if (high == n) break;
-				max = Math.max(arr[low], arr[high]);
-				min = Math.min(arr[low], arr[high]);	
-			} else if (max - min <= k) {
-				ans += high - low;
-				high ++;
-				if (high == n) break;
-				max = Math.max(max, arr[high]);
-				min = Math.min(min, arr[high]);
-			} else {
-				low ++;
-				min = Integer.MAX_VALUE; max = -1;
-				for (int i = low; i <= high; i ++) {
-					min = Math.min(min, arr[i]); max = Math.max(max, arr[i]);
-				}
+		long ans = 0;
+		Deque<Pair> max = new LinkedList<Pair>(), min = new LinkedList<Pair>();
+		int l = 0;
+		for (int r = 0; r < n; r ++) {
+			while (!max.isEmpty() && arr[r] >= max.peekLast().val) max.pollLast();
+			while (!min.isEmpty() && arr[r] <= min.peekLast().val) min.pollLast();
+			max.add(new Pair(arr[r], r)); min.add(new Pair(arr[r], r));
+			
+			if (min.size() == 1 && max.peekFirst().val - min.peekFirst().val > k) {
+				while (max.peekFirst().val - min.peekFirst().val > k) l = max.pollFirst().idx + 1;
+			} else if (max.size() == 1 && max.peekFirst().val - min.peekFirst().val > k) {
+				while (max.peekFirst().val - min.peekFirst().val > k) l = min.pollFirst().idx + 1;
 			}
+			ans += r - l + 1;
 		}
 		
 		System.out.println(ans);
