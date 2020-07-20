@@ -17,7 +17,7 @@ public class AClassicProblem {
 		for (int i = 0; i < n; i ++) arr[i] = Integer.parseInt(st.nextToken());
 		
 		long ans = 0;
-		Deque<Pair> max = new LinkedList<Pair>(), min = new LinkedList<Pair>();
+		Deque<Pair> max = new ArrayDeque<Pair>(), min = new ArrayDeque<Pair>();
 		int l = 0;
 		for (int r = 0; r < n; r ++) {
 			while (!max.isEmpty() && arr[r] >= max.peekLast().val) max.pollLast();
