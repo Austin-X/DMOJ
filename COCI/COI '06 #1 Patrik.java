@@ -2,30 +2,28 @@ import java.io.*;
 import java.util.*;
 
 public class Patrik {
-	static class Node {
+	static class Pair {
 		int val, cnt;
-		Node (int val, int cnt) { this.val = val; this.cnt = cnt; }
+		Pair (int val, int cnt) { this.val = val; this.cnt = cnt; }
 	}
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int n = Integer.parseInt(br.readLine());
 		
 		long ans = 0;
-		Stack<Node> s = new Stack<Node>();
+		int[] arr = new int[n];
+		for (int i = 0; i < n; i ++) arr[i] = Integer.parseInt(br.readLine());
+		
+		Stack<Pair> s = new Stack<Pair>();
 		for (int i = 0; i < n; i ++) {
-			int x = Integer.parseInt(br.readLine());
+			int cnt = 1;
 			while (!s.isEmpty()) {
-				if (x > s.peek().val) ans += s.pop().cnt;
-				else break;
-			}
-			int cnt = 0;
-			while (!s.isEmpty()) {
-				if (x == s.peek().val) { ans += s.peek().cnt; cnt = s.pop().cnt; }
+				if (arr[i] > s.peek().val) ans += s.pop().cnt; 
+				else if (arr[i] == s.peek().val) { cnt = s.pop().cnt + 1; ans += cnt - 1; }
 				else { ans ++; break; }
 			}
-			s.push(new Node(x, cnt + 1));
+			s.push(new Pair(arr[i], cnt));
 		}
-
 		System.out.println(ans);
 	}
 }
