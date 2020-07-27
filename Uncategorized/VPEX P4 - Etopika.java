@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Etopika {
 	static int[] euler, heights, first;
-	static Node[] segTree;
+	static int[][] sparseTable;
 	static boolean[] vis;
 	static class Pair implements Comparable<Pair>{
 		int dest, weight;
@@ -31,9 +31,7 @@ public class Etopika {
 		euler = new int[2 * n - 1]; heights = new int[2 * n - 1]; first = new int[n + 1]; vis = new boolean[n + 1];
 		vis[1] = true; first[1] = 0;
 		preprocessDfs(0, 1, adj);
-
-		segTree = new Node[2 * n * 4];
-		constructSegtree(heights, 0, 2 * n - 2, 0);
+		buildSparseTable(heights, 2 * n - 1);
 		
 		int[][] bananas = new int[d][2];
 		for (int i = 0; i < d; i ++) {
@@ -60,48 +58,47 @@ public class Etopika {
 		
 		long[][] dp = new long[d][2]; 
 		for (int i = 0; i < d; i ++) {
-			int lca = euler[rangeMinimumQuery(first[bananas[i][0]], first[bananas[i][1]], 0, 2 * n - 2, 0).idx];
+			int lca = euler[query(first[bananas[i][0]], first[bananas[i][1]])];
+			int dis = Math.abs(minDis[bananas[i][1]] - minDis[lca]) + Math.abs(minDis[bananas[i][0]] - minDis[lca]);
 			if (i == 0) {
-				dp[i][0] = minDis[bananas[i][1]] + Math.abs(minDis[bananas[i][1]] - minDis[lca]) + Math.abs(minDis[bananas[i][0]] - minDis[lca]);
-				dp[i][1] = minDis[bananas[i][0]] + Math.abs(minDis[bananas[i][1]] - minDis[lca]) + Math.abs(minDis[bananas[i][0]] - minDis[lca]);
+				dp[i][0] = minDis[bananas[i][1]] + dis;
+				dp[i][1] = minDis[bananas[i][0]] + dis;
 			} else {
-				int lca0 = euler[rangeMinimumQuery(first[bananas[i - 1][0]], first[bananas[i][1]], 0, 2 * n - 2, 0).idx];
-				int lca1 = euler[rangeMinimumQuery(first[bananas[i - 1][1]], first[bananas[i][1]], 0, 2 * n - 2, 0).idx];
-				int lca2 = euler[rangeMinimumQuery(first[bananas[i - 1][0]], first[bananas[i][0]], 0, 2 * n - 2, 0).idx];
-				int lca3 = euler[rangeMinimumQuery(first[bananas[i - 1][1]], first[bananas[i][0]], 0, 2 * n - 2, 0).idx];
-				dp[i][0] = Math.min(dp[i - 1][0] + Math.abs(minDis[bananas[i - 1][0]] - minDis[lca0]) + Math.abs(minDis[bananas[i][1]] - minDis[lca0]), dp[i - 1][1] + Math.abs(minDis[bananas[i - 1][1]] - minDis[lca1]) + Math.abs(minDis[bananas[i][1]] - minDis[lca1])) + Math.abs(minDis[bananas[i][1]] - minDis[lca]) + Math.abs(minDis[bananas[i][0]] - minDis[lca]);
-				dp[i][1] = Math.min(dp[i - 1][0] + Math.abs(minDis[bananas[i - 1][0]] - minDis[lca2]) + Math.abs(minDis[bananas[i][0]] - minDis[lca2]), dp[i - 1][1] + Math.abs(minDis[bananas[i - 1][1]] - minDis[lca3]) + Math.abs(minDis[bananas[i][0]] - minDis[lca3])) + Math.abs(minDis[bananas[i][1]] - minDis[lca]) + Math.abs(minDis[bananas[i][0]] - minDis[lca]);
+				int lca0 = euler[query(first[bananas[i - 1][0]], first[bananas[i][1]])];
+				int lca1 = euler[query(first[bananas[i - 1][1]], first[bananas[i][1]])];
+				int lca2 = euler[query(first[bananas[i - 1][0]], first[bananas[i][0]])];
+				int lca3 = euler[query(first[bananas[i - 1][1]], first[bananas[i][0]])];
+				dp[i][0] = Math.min(dp[i - 1][0] + Math.abs(minDis[bananas[i - 1][0]] - minDis[lca0]) + Math.abs(minDis[bananas[i][1]] - minDis[lca0]), dp[i - 1][1] + Math.abs(minDis[bananas[i - 1][1]] - minDis[lca1]) + Math.abs(minDis[bananas[i][1]] - minDis[lca1])) + dis;
+				dp[i][1] = Math.min(dp[i - 1][0] + Math.abs(minDis[bananas[i - 1][0]] - minDis[lca2]) + Math.abs(minDis[bananas[i][0]] - minDis[lca2]), dp[i - 1][1] + Math.abs(minDis[bananas[i - 1][1]] - minDis[lca3]) + Math.abs(minDis[bananas[i][0]] - minDis[lca3])) + dis;
 			}
 		}
 		System.out.println(Math.min(dp[d - 1][0], dp[d - 1][1]));
 	}
-	static class Node {
-		int idx, height;
-		Node (int idx, int height) { this.idx = idx; this.height = height; }
+
+	static void buildSparseTable (int[] heights, int size) {
+		int width = (int)(Math.floor(Math.log(size) / Math.log(2))) + 1;
+		sparseTable = new int[size][width];
+		for (int i = 0; i < size; i ++) sparseTable[i][0] = i;
+		for (int j = 1; j < width; j ++) {
+			for (int i = 0; i <= size - (1 << j); i ++) {
+				if (heights[sparseTable[i][j - 1]] <= heights[sparseTable[i + (1 << j - 1)][j - 1]]) {
+					sparseTable[i][j] = sparseTable[i][j - 1];
+				} else sparseTable[i][j] = sparseTable[i + (1 << j - 1)][j - 1];
+			}
+		}
 	}
-	static Node rangeMinimumQuery (int l, int r, int low, int high, int pos) {
-		if (l > r) return rangeMinimumQuery(r, l, low, high, pos);
+	
+	static int query(int l, int r) {
+		if (l > r) {
+			int temp = l;
+			l = r;
+			r = temp;
+		}
 		
-		int mid = (low + high) / 2;
-		if (l <= low && r >= high) return segTree[pos];
-		else if (l > mid) return rangeMinimumQuery(l, r, mid + 1, high, pos * 2 + 2);
-		else if (r <= mid) return rangeMinimumQuery(l, r, low, mid, pos * 2 + 1);
-		else {
-			Node x = rangeMinimumQuery(l, r, low, mid, pos * 2 + 1), y = rangeMinimumQuery(l, r, mid + 1, high, pos * 2 + 2);
-			if (x.height <= y.height) return x;
-			else return y;
-		}
-	}
-	static Node constructSegtree (int[] heights, int low, int high, int pos) {
-		if (low == high) {
-			segTree[pos] = new Node(low, heights[low]);
-			return segTree[pos];
-		}
-		int mid = (low + high) / 2;
-		Node x = constructSegtree(heights, low, mid, 2 * pos + 1), y = constructSegtree(heights, mid + 1, high, 2 * pos + 2);
-		if (x.height <= y.height) segTree[pos] = x;
-		else segTree[pos] = y;
-		return segTree[pos];
+		int length = r - l + 1;
+		int log = (int)(Math.floor(Math.log(length) / Math.log(2)));
+		if (heights[sparseTable[l][log]] <= heights[sparseTable[r - (1 << log) + 1][log]]) return sparseTable[l][log];
+		else return sparseTable[r - (1 << log) + 1][log];
 	}
 	static int idx = 0;
 	static void preprocessDfs(int parentIdx, int cur, ArrayList<Pair>[] adj) {
