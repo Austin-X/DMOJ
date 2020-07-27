@@ -32,8 +32,7 @@ public class Etopika {
 		vis[1] = true; first[1] = 0;
 		preprocessDfs(0, 1, adj);
 
-		int pow = (int)Math.ceil(Math.log(2 * n) / Math.log(2));
-		segTree = new Node[(int)(Math.pow(2, pow) * 2 - 1)];
+		segTree = new Node[2 * n * 4];
 		constructSegtree(heights, 0, 2 * n - 2, 0);
 		
 		int[][] bananas = new int[d][2];
@@ -70,8 +69,8 @@ public class Etopika {
 				int lca1 = euler[rangeMinimumQuery(first[bananas[i - 1][1]], first[bananas[i][1]], 0, 2 * n - 2, 0).idx];
 				int lca2 = euler[rangeMinimumQuery(first[bananas[i - 1][0]], first[bananas[i][0]], 0, 2 * n - 2, 0).idx];
 				int lca3 = euler[rangeMinimumQuery(first[bananas[i - 1][1]], first[bananas[i][0]], 0, 2 * n - 2, 0).idx];
-				dp[i][0] = Math.min(dp[i - 1][0] + Math.abs(minDis[bananas[i - 1][0]] - minDis[lca0]) + Math.abs(minDis[bananas[i][1]] - minDis[lca0]) + Math.abs(minDis[bananas[i][1]] - minDis[lca]) + Math.abs(minDis[bananas[i][0]] - minDis[lca]), dp[i - 1][1] + Math.abs(minDis[bananas[i - 1][1]] - minDis[lca1]) + Math.abs(minDis[bananas[i][1]] - minDis[lca1]) + Math.abs(minDis[bananas[i][1]] - minDis[lca]) + Math.abs(minDis[bananas[i][0]] - minDis[lca]));
-				dp[i][1] = Math.min(dp[i - 1][0] + Math.abs(minDis[bananas[i - 1][0]] - minDis[lca2]) + Math.abs(minDis[bananas[i][0]] - minDis[lca2]) + Math.abs(minDis[bananas[i][1]] - minDis[lca]) + Math.abs(minDis[bananas[i][0]] - minDis[lca]), dp[i - 1][1] + Math.abs(minDis[bananas[i - 1][1]] - minDis[lca3]) + Math.abs(minDis[bananas[i][0]] - minDis[lca3]) + Math.abs(minDis[bananas[i][1]] - minDis[lca]) + Math.abs(minDis[bananas[i][0]] - minDis[lca]));
+				dp[i][0] = Math.min(dp[i - 1][0] + Math.abs(minDis[bananas[i - 1][0]] - minDis[lca0]) + Math.abs(minDis[bananas[i][1]] - minDis[lca0]), dp[i - 1][1] + Math.abs(minDis[bananas[i - 1][1]] - minDis[lca1]) + Math.abs(minDis[bananas[i][1]] - minDis[lca1])) + Math.abs(minDis[bananas[i][1]] - minDis[lca]) + Math.abs(minDis[bananas[i][0]] - minDis[lca]);
+				dp[i][1] = Math.min(dp[i - 1][0] + Math.abs(minDis[bananas[i - 1][0]] - minDis[lca2]) + Math.abs(minDis[bananas[i][0]] - minDis[lca2]), dp[i - 1][1] + Math.abs(minDis[bananas[i - 1][1]] - minDis[lca3]) + Math.abs(minDis[bananas[i][0]] - minDis[lca3])) + Math.abs(minDis[bananas[i][1]] - minDis[lca]) + Math.abs(minDis[bananas[i][0]] - minDis[lca]);
 			}
 		}
 		System.out.println(Math.min(dp[d - 1][0], dp[d - 1][1]));
@@ -84,15 +83,9 @@ public class Etopika {
 		if (l > r) return rangeMinimumQuery(r, l, low, high, pos);
 		
 		int mid = (low + high) / 2;
-		if (l <= low && r >= high) {
-			return segTree[pos];
-		}
-		else if (l > mid) {
-			return rangeMinimumQuery(l, r, mid + 1, high, pos * 2 + 2);
-		}
-		else if (r <= mid) {
-		    return rangeMinimumQuery(l, r, low, mid, pos * 2 + 1);
-		}
+		if (l <= low && r >= high) return segTree[pos];
+		else if (l > mid) return rangeMinimumQuery(l, r, mid + 1, high, pos * 2 + 2);
+		else if (r <= mid) return rangeMinimumQuery(l, r, low, mid, pos * 2 + 1);
 		else {
 			Node x = rangeMinimumQuery(l, r, low, mid, pos * 2 + 1), y = rangeMinimumQuery(l, r, mid + 1, high, pos * 2 + 2);
 			if (x.height <= y.height) return x;
@@ -106,11 +99,8 @@ public class Etopika {
 		}
 		int mid = (low + high) / 2;
 		Node x = constructSegtree(heights, low, mid, 2 * pos + 1), y = constructSegtree(heights, mid + 1, high, 2 * pos + 2);
-		if (x.height <= y.height) {
-			segTree[pos] = x;
-		} else {
-			segTree[pos] = y;
-		}
+		if (x.height <= y.height) segTree[pos] = x;
+		else segTree[pos] = y;
 		return segTree[pos];
 	}
 	static int idx = 0;
