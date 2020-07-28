@@ -2,36 +2,49 @@ import java.io.*;
 import java.util.*;
 
 public class DiverseArrays {
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static StringTokenizer st;
 	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		int n = Integer.parseInt(st.nextToken());
-		int k = Integer.parseInt(st.nextToken());
-		int[] arr = new int[n];
-		int[] cn = new int[1000001];
-		
+		int n = readInt(), k  = readInt();
+	
 		long ans = 0;
-		for (int i = 0; i < n; i ++) arr[i] = Integer.parseInt(br.readLine());
-
-		if (k == 1) ans = ((long)n * (long)n + (long)n) / 2;
-		else {
-			int low = 0, high = 0, count = 0;
-			while (low <= high) {
-				if (count >= k) {
-					ans += n - high + 1;
-					cn[arr[low]] --;
-					if (cn[arr[low]] == 0) count --;
-					low ++;
-				} else {
-					if (high == n) break;
-					if (cn[arr[high]] == 0) count ++;
-					cn[arr[high]] ++;
-					high ++;
+		Deque<Integer> q = new ArrayDeque<Integer>();
+		int[] cn = new int[(int)1e6 + 1];
+		int[] arr = new int[n];
+		for (int i = 0; i < n; i ++) arr[i] = readInt();
+		for (int l = 0, r = 0; r < n; r ++) {
+			if (cn[arr[r]] == 0) q.addLast(arr[r]);
+			cn[arr[r]] ++;
+			if (q.size() == k) {
+				ans += n - r; 
+				while (cn[arr[l]] != 1) {
+					cn[arr[l]] --; l ++; ans += n - r;
 				}
+				q.pollFirst();
+				cn[arr[l]] --; l ++;
 			}
 		}
-		
 		System.out.println(ans);
+	}
+	
+	static String next() throws IOException {
+		while (st == null || !st.hasMoreTokens()) 
+			st = new StringTokenizer(br.readLine().trim());
+		return st.nextToken();
+	}
+	static long readLong() throws IOException {
+		return Long.parseLong(next());
+	}
+	static int readInt() throws IOException {
+		return Integer.parseInt(next());
+	}
+	static double readDouble() throws IOException {
+		return Double.parseDouble(next());
+	}
+	static char readCharacter() throws IOException {
+		return next().charAt(0);
+	}
+	static String readLine() throws IOException {
+		return br.readLine().trim();
 	}
 }
