@@ -19,7 +19,7 @@ public class BadNews {
 				grid[i][j] = next().charAt(0);
 
 		for (int i = 0; i < q; i ++) {
-			String word = next();
+			String word = readLine();
 			flag = false;
 			recurse(word, 0, 0, 0);
 			System.out.println(flag ? "good puzzle!" : "bad puzzle!");
