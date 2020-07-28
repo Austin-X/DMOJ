@@ -38,6 +38,7 @@ public class LazySort {
 			else if (original.peekLast() == q.peekLast() + 1) { x = original.pollLast(); q.addLast(x); recurse(n, original, q); original.addLast(x); q.pollLast(); }
 		}
 	}
+	
 	static String next() throws IOException {
 		while (st == null || !st.hasMoreTokens()) 
 			st = new StringTokenizer(br.readLine().trim());
