@@ -6,35 +6,24 @@ public class MusicalChairs {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		int n = Integer.parseInt(st.nextToken());
-		int k = Integer.parseInt(st.nextToken());
-		boolean[] chairs = new boolean[n + 1];
-		
+		int n = Integer.parseInt(st.nextToken()), k = Integer.parseInt(st.nextToken());
+		boolean[] empty = new boolean[n + 1];
 		st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < k; i ++) chairs[Integer.parseInt(st.nextToken())] = true;
-		
-		Stack<Integer> stack = new Stack <Integer>();
+		for (int i = 0; i < k; i ++) empty[Integer.parseInt(st.nextToken())] = true;
 		int[] students = new int[n + 1];
-		
-		st = new StringTokenizer(br.readLine());
-		for (int i = 1; i <= k + 1; i ++) {
-			students[Integer.parseInt(st.nextToken())] = i;
-		}
-		
-		while (stack.size() != 1) {
-			for (int i = 1; i <= n; i ++) {
-				if (chairs[i] && students[i] != 0) {
-					chairs[i] = false;
-					students[i] = 0;
-				} else if (chairs[i] && !stack.empty()) {
-					stack.pop(); chairs[i] = false;
-				} else if (students[i] != 0) {
-					stack.push(students[i]);
-					students[i] = 0;
-				} 
-			}
-		}
 
-		System.out.println(stack.peek());
+		st = new StringTokenizer(br.readLine());
+		for (int i = 1; i <= k + 1; i ++) students[Integer.parseInt(st.nextToken())] = i;
+		
+		Stack<Integer> s = new Stack<Integer>();
+		int idx = 1, cn = 0;
+		while (true) {
+			if (students[idx] != 0) { int temp = students[idx]; students[idx] = 0; s.push(temp); }
+			if (empty[idx] && !s.isEmpty()) { empty[idx] = false; s.pop(); cn ++; }
+			if (cn == k) break;
+			idx ++;
+			if (idx == n + 1) idx = 1;
+		}
+		System.out.println(s.peek());
 	}
 }
