@@ -7,8 +7,8 @@ public class PenniesInTheRing {
 			if (r == 0) break;
 			
 			int cnt = 0;
-			for (int i = 1; i <= r; i ++) cnt += (int)Math.sqrt(r * r - i * i) + 1;
-			System.out.println(cnt * 4 + 1);
+			for (int i = 1; i <= r; i ++) cnt += (int)Math.sqrt(r * r - i * i);
+			System.out.println(cnt * 4 + r * 4 + 1);
 		}
 	}
 	
