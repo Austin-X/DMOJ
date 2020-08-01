@@ -8,19 +8,19 @@ public class DiverseArrays {
 		int n = readInt(), k  = readInt();
 	
 		long ans = 0;
-		Deque<Integer> q = new ArrayDeque<Integer>();
+		int distinct = 0;
 		int[] cn = new int[(int)1e6 + 1];
 		int[] arr = new int[n];
 		for (int i = 0; i < n; i ++) arr[i] = readInt();
 		for (int l = 0, r = 0; r < n; r ++) {
-			if (cn[arr[r]] == 0) q.addLast(arr[r]);
+			if (cn[arr[r]] == 0) distinct ++;
 			cn[arr[r]] ++;
-			if (q.size() == k) {
+			if (distinct == k) {
 				ans += n - r; 
 				while (cn[arr[l]] != 1) {
 					cn[arr[l]] --; l ++; ans += n - r;
 				}
-				q.pollFirst();
+				distinct --;
 				cn[arr[l]] --; l ++;
 			}
 		}
