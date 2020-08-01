@@ -18,22 +18,22 @@ public class PickIt2 {
 		long[] psa = new long[n + 1];
 		for (int i = 1; i <= n; i ++) psa[i] = psa[i - 1] + readInt();
 		
-		TreeSet<Pair> set = new TreeSet<Pair>();
 		Deque<Pair> q = new ArrayDeque<Pair>();
 		for (int i = 1; i <= n; i ++) {
 			if (i <= k) {
 				dp[i] = psa[i];
-				set.add(new Pair(dp[i - 1] + psa[k] - psa[i], k));
-				q.addLast(new Pair(dp[i - 1] + psa[k] - psa[i], k));
+				long val = dp[i - 1] + psa[k] - psa[i];
+				while (!q.isEmpty() && val >= q.peekLast().val) q.pollLast();
+				q.addLast(new Pair(dp[i - 1] + psa[k] - psa[i], i));
 			}
 			else {
-				dp[i] = set.first().val + psa[i] - psa[k];
-				set.remove(q.pollFirst());
-				q.addLast(new Pair(dp[i - 1] - psa[i] + psa[k], i));
-				set.add(q.peekLast());
+				dp[i] = q.peekFirst().val + psa[i] - psa[k];
+				if (q.peekFirst().idx == i - k) q.pollFirst();
+				long val = dp[i - 1] - psa[i] + psa[k];
+				while (!q.isEmpty() && val >= q.peekLast().val) q.pollLast();
+				q.addLast(new Pair(val, i));
 			}
 		}
-
 		System.out.println(dp[n]);
 	}
 	
