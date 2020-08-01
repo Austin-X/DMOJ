@@ -7,21 +7,19 @@ public class DiverseArrays {
 	public static void main(String[] args) throws IOException {
 		int n = readInt(), k  = readInt();
 	
-		long ans = 0;
-		int distinct = 0;
-		int[] cn = new int[(int)1e6 + 1];
-		int[] arr = new int[n];
+		long ans = 0; int distinct = 0;
+		int[] freq = new int[(int)1e6 + 1], arr = new int[n];
 		for (int i = 0; i < n; i ++) arr[i] = readInt();
 		for (int l = 0, r = 0; r < n; r ++) {
-			if (cn[arr[r]] == 0) distinct ++;
-			cn[arr[r]] ++;
+			if (freq[arr[r]] == 0) distinct ++;
+			freq[arr[r]] ++;
 			if (distinct == k) {
 				ans += n - r; 
-				while (cn[arr[l]] != 1) {
-					cn[arr[l]] --; l ++; ans += n - r;
+				while (freq[arr[l]] != 1) {
+					freq[arr[l]] --; l ++; ans += n - r;
 				}
 				distinct --;
-				cn[arr[l]] --; l ++;
+				freq[arr[l]] --; l ++;
 			}
 		}
 		System.out.println(ans);
