@@ -5,9 +5,8 @@ public class FastExponents {
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringTokenizer st;
 	public static void main(String[] args) throws IOException {
-		int n = readInt(); HashSet<Long> set = new HashSet<Long>();
-		for (int i = 0; i < 63; i ++) set.add((long)Math.pow(2, i));
-		for (int i = 0; i < n; i ++) { long x = readLong(); System.out.println(set.contains(x) ? "T" : "F"); }
+		int n = readInt();
+		for (int i = 0; i < n; i ++) { long x = readLong(); System.out.println(x - (x & -x) == 0 ? "T" : "F"); }
 	}
 
 	static String next() throws IOException {
