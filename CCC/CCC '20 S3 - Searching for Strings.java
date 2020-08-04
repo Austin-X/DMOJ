@@ -22,11 +22,7 @@ public class SearchingForStrings {
 		}
 
 		HashSet<Long> arr = new HashSet<Long>();
-		boolean pass = true;
-		for (int i = 0; i < 26; i ++) {
-			if (cn1[i] != cn2[i]) { pass = false; break; }
-		}
-		if (pass) arr.add((long)haystackHashcode);
+		if (Arrays.equals(cn1, cn2)) arr.add((long)haystackHashcode);
 
 		for (int i = n.length; i < h.length; i ++) {
 			cn2[h[i - n.length] - 'a'] --;
@@ -36,11 +32,7 @@ public class SearchingForStrings {
 			haystackHashcode %= MOD;
 			haystackHashcode += (h[i] - 96);
 			haystackHashcode %= MOD;
-			pass = true;
-			for (int j = 0; j < 26; j ++) {
-				if (cn1[j] != cn2[j]) { pass = false; break; }
-			}
-			if (pass) arr.add((long)haystackHashcode);
+			if (Arrays.equals(cn1, cn2)) arr.add((long)haystackHashcode);
 		}
 		
 		System.out.println(arr.size());
