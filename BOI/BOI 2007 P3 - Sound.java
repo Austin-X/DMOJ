@@ -1,42 +1,56 @@
 import java.io.*;
 import java.util.*;
 
-/* Submit this code using Java11 instead of Java8 because the 'int' primitive data type in Java8 takes up 16 bytes whereas for Java11, the 'int' primitive data type
- * takes up only 4 bytes. */
-
+/* Submit this code using Java11 instead of Java8 because of memory issues in Java 8. */
 public class Sound {
+	static class Pair {
+		int val, idx;
+		Pair (int val, int idx) { this.val = val; this.idx = idx; }
+	}
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static StringTokenizer st;
 	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		int n = Integer.parseInt(st.nextToken()), m = Integer.parseInt(st.nextToken()), c = Integer.parseInt(st.nextToken());
-		st = new StringTokenizer(br.readLine());
-		int[] arr = new int[n + 1];
-		for (int i = 1; i <= n; i ++) arr[i] = Integer.parseInt(st.nextToken());
-		
-		if (m > n) { System.out.println("NONE"); System.exit(0); }
-		
-		TreeSet<Integer> set = new TreeSet<Integer>();
-		int[] cn = new int[1000001];
-		for (int i = 1; i <= m; i ++) {
-			cn[arr[i]] ++;
-			set.add(arr[i]);
-		}
-
-		boolean flag = false;
-		if (set.last() - set.first() <= c) {
-			flag = true; System.out.println(1);
-		}
-		for (int i = m + 1; i <= n; i ++) {
-			cn[arr[i - m]] --;
-			cn[arr[i]] ++;
-			if (cn[arr[i - m]] == 0) set.remove(arr[i - m]);
-			if (cn[arr[i]] == 1) set.add(arr[i]);
-			if (set.last() - set.first() <= c) {
-				flag = true; System.out.println(i - m + 1);
+		int n = readInt(), m = readInt(), c = readInt();
+		int[] arr = new int[n];
+		for (int i = 0; i < n; i ++) arr[i] = readInt();
+		Deque<Pair> max = new ArrayDeque<Pair>(), min = new ArrayDeque<Pair>();
+		boolean none = true;
+		for (int i = 0; i < n; i ++) {
+			if (i < m - 1) {
+				while (!max.isEmpty() && arr[i] >= max.peekLast().val) max.pollLast();
+				while (!min.isEmpty() && arr[i] <= min.peekLast().val) min.pollLast();
+				max.add(new Pair(arr[i], i)); min.add(new Pair (arr[i], i));
+			} else {
+				if (max.peekFirst().idx == i - m) max.pollFirst();
+				if (min.peekFirst().idx == i - m) min.pollFirst();
+				while (!max.isEmpty() && arr[i] >= max.peekLast().val) max.pollLast();
+				while (!min.isEmpty() && arr[i] <= min.peekLast().val) min.pollLast();
+				max.add(new Pair(arr[i], i)); min.add(new Pair(arr[i], i));
+				
+				if (max.peekFirst().val - min.peekFirst().val <= c) { none = false; System.out.println(i - m + 2); }
 			}
 		}
-		
-		if (!flag) System.out.println("NONE");
+		if (none) System.out.println("NONE");
+	}
+
+	static String next() throws IOException {
+		while (st == null || !st.hasMoreTokens()) 
+			st = new StringTokenizer(br.readLine().trim());
+		return st.nextToken();
+	}
+	static long readLong() throws IOException {
+		return Long.parseLong(next());
+	}
+	static int readInt() throws IOException {
+		return Integer.parseInt(next());
+	}
+	static double readDouble() throws IOException {
+		return Double.parseDouble(next());
+	}
+	static char readCharacter() throws IOException {
+		return next().charAt(0);
+	}
+	static String readLine() throws IOException {
+		return br.readLine().trim();
 	}
 }
