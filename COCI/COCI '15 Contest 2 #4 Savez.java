@@ -4,49 +4,28 @@ import java.util.*;
 public class Savez {
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringTokenizer st;
-	
-	static class Trie {
-		HashMap<Character, Trie> children;
-		int length;
-		Trie () {
-			children = new HashMap<Character, Trie>();
-			length = 1;
-		}
-	}
-	
-	static int ans = 0, temp;
-	static Trie root = new Trie();
-	static boolean flag;
 	public static void main(String[] args) throws IOException {
 		int n = readInt();
 		
-		Trie root = new Trie();
-		for (int i = 0; i < n; i ++) {
+		HashMap<Long, Integer> map = new HashMap<Long, Integer>();
+		for (int t = 0; t < n; t ++) {
 			String str = readLine();
-			flag = true; temp = 1;
-			insert(root, str, 0);
-			ans = Math.max(ans, temp);
-		}
-
-		System.out.println(ans);
-	}
-	
-	static void insert(Trie cur, String str, int idx) {
-		if (idx == str.length()) {
-			cur.length = temp;
-			cur.children.put('$', new Trie()); return;
-		}
-		
-		if (cur.children.isEmpty() || !cur.children.containsKey(str.charAt(idx))) {
-			flag = false;
-			cur.children.put(str.charAt(idx), new Trie());
-			insert(cur.children.get(str.charAt(idx)), str, idx + 1);
-		} else {
-			if (cur.children.get(str.charAt(idx)).children.containsKey('$') && str.substring(0, idx + 1).equals(str.substring(str.length() - idx - 1)) && flag) {
-				temp = Math.max(temp, cur.children.get(str.charAt(idx)).length + 1);
+			int l = str.length(); long[] hsh = new long[l + 1], pow = new long[l + 1]; int seed = 131;
+			pow[0] = 1;
+			int temp = 1;
+			for (int i = 1; i <= l; i ++) {
+				hsh[i] = hsh[i - 1] * seed + str.charAt(i - 1);
+				pow[i] = pow[i - 1] * seed;
 			}
-			insert(cur.children.get(str.charAt(idx)), str, idx + 1);
+			for (int i = 1; i <= l; i ++) {
+				long prefixHash = hsh[i], suffixHash = hsh[l] - hsh[l - i] * pow[i]; 
+				if (prefixHash == suffixHash && map.containsKey(prefixHash)) temp = Math.max(temp, map.get(prefixHash) + 1);
+			}
+			map.put(hsh[l], temp);
 		}
+		int ans = 0;
+		for (long x : map.keySet()) ans = Math.max(ans, map.get(x));
+		System.out.println(ans);
 	}
 
 	static String next() throws IOException {
