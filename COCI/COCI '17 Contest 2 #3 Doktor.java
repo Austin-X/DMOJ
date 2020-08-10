@@ -2,40 +2,41 @@ import java.io.*;
 import java.util.*;
 
 public class Doktor {
-	static class Pair {
-		int cn, l, r;
-		Pair (int cn, int l, int r) { this.cn = cn; this.l = l; this.r = r; }
-	}
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringTokenizer st;
 	public static void main(String[] args) throws IOException {
 		int n = readInt();
-		int[] arr = new int[n + 1], already = new int[n + 1];
+		int[] arr = new int[n + 1], psa = new int[n + 1];
+		@SuppressWarnings("unchecked")
+		ArrayList<Double>[] adj = new ArrayList[2 * n + 1];
+		int[] cnt = new int[2 * n + 1];
+		for (int i = 1; i <= 2 * n; i ++) adj[i] = new ArrayList<Double>();
 		for (int i = 1; i <= n; i ++) {
 			arr[i] = readInt();
-			if (arr[i] == i) already[i] = already[i - 1] + 1;
-			else already[i] = already[i - 1];
-		}
-		
-		HashMap<Double, Pair> map = new HashMap<Double, Pair>();
-		for (int i = 1; i <= n; i ++) {
-			double val = (double)(i + arr[i]) / 2;
-			if (val != i) {
-				if (!map.containsKey(val)) map.put(val, new Pair(1, i, i)); 
-				else map.put(val, new Pair(map.get(val).cn + 1, map.get(val).l, i));
+			psa[i] = arr[i] == i ? psa[i - 1] + 1 : psa[i - 1];
+			if (arr[i] != i) {
+				double x = (arr[i] + i) / (double)2;
+				adj[arr[i] + i].add(Math.abs(x - i));
+				cnt[arr[i] + i] ++;
 			}
 		}
-
-		int max = already[n]; double ans = 1, diffAns = 0;
-		for (double x : map.keySet()) {
-			double diff = Math.max(Math.abs(x - map.get(x).l), Math.abs(x - map.get(x).r));
-			int lower = (int)(x - diff), upper = (int)(x + diff);
-			int temp = map.get(x).cn + already[n] - already[upper] + already[lower - 1];
-			if (x % 1 == 0) temp += already[(int)x] - already[(int)x - 1];
-			if (temp > max) { max = temp; ans = x; diffAns = diff; }
+		for (ArrayList<Double> x : adj) {
+			if (x != null) Collections.sort(x, Collections.reverseOrder());
 		}
-
-		System.out.println(arr[(int)(ans - diffAns)] + " "  + arr[(int)(ans + diffAns)]);
+		
+		int ans = psa[n], ll = 1, rr = 1;
+		for (int i = 2; i <= 2 * n; i ++) {
+			int temp = cnt[i];
+			for (double x : adj[i]) {
+				double val = i / (double)2;
+				int best = temp + psa[n] - psa[(int)(val + x)] + psa[(int)(val - x) - 1];
+				if (val % 1 == 0) best += psa[(int)val] - psa[(int)(val - 1)];
+				if (best > ans) { ans = best; ll = (int)(val - x); rr = (int)(val + x); }
+				if (arr[(int)(val + x)] + (int)(val + x) == i && arr[(int)(val - x)] + (int)(val - x) == i) temp -= 2;
+				else temp --;
+			}
+		}
+		System.out.println(arr[ll] + " "  + arr[rr]);
 	}
 
 	static String next() throws IOException {
