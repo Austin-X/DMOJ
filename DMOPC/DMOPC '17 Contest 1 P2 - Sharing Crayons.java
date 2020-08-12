@@ -10,9 +10,9 @@ public class SharingCrayons {
 		for (int i = 0; i < n; i ++) psa[i] = i == 0 ? readInt() : psa[i - 1] + readInt();;
 		long ans = 0;
 		HashMap<Integer, Integer> cnt = new HashMap<Integer, Integer>();
+		cnt.put(0, 1);
 		for (int i = 0; i < n; i ++) {
 			int diff = (int) (psa[i] % m);
-			if (diff == 0) ans ++;
 			ans += cnt.getOrDefault(diff, 0);
 			cnt.putIfAbsent(diff, 0);
 			cnt.put(diff, cnt.get(diff) + 1);
