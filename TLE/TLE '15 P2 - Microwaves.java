@@ -41,6 +41,7 @@ public class Microwaves {
 		}	
 		System.out.println(microwave.first().val);
 	}
+	
 	static String next() throws IOException {
 		while (st == null || !st.hasMoreTokens()) 
 			st = new StringTokenizer(br.readLine().trim());
