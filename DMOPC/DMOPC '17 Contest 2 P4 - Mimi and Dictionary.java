@@ -14,7 +14,7 @@ public class MimiAndDictionary {
 		}
 		for (int i = str.length - 1; i >= 0; i --) suffixHsh[i] = i == str.length - 1 ? str[i] : suffixHsh[i + 1] * base + str[i];
 		
-		TreeSet<Integer> indices = new TreeSet<Integer>();
+		ArrayList<Integer> indices = new ArrayList<Integer>();
 		long hsh1, hsh2;
 		for (int i = 0; i < str.length - 1; i ++) {
 			int mid = i / 2; 
@@ -29,14 +29,14 @@ public class MimiAndDictionary {
 		}
 		if (indices.isEmpty()) { System.out.println(0); System.exit(0); }
 		boolean flag = false;
-		for (int i = 1; i < str.length - indices.last(); i ++) {
-			if (prefixHsh[i + indices.last()] - prefixHsh[i - 1] * pow[indices.last() + 1] == prefixHsh[indices.last()]) { flag = true; break; }
+		int x = indices.get(indices.size() - 1);
+		for (int i = 1; i < str.length - x; i ++) {
+			if (prefixHsh[i + x] - prefixHsh[i - 1] * pow[x + 1] == prefixHsh[x]) { flag = true; break; }
 		}
-		if (flag) System.out.println(indices.last() + 1);
+		if (flag) System.out.println(x + 1);
 		else {
-			indices.pollLast();
-			if (indices.isEmpty()) System.out.println(0);
-			else System.out.println(indices.last() + 1);
+			if (indices.size() == 1) System.out.println(0);
+			else System.out.println(indices.get(indices.size() - 2) + 1);
 		}
 	}
 
