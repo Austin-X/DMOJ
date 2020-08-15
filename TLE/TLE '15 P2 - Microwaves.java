@@ -8,14 +8,6 @@ public class Microwaves {
 		public int compareTo(Pair p) { return Integer.compare(t, p.t); }
 	}
 	
-	static class MyLong implements Comparable<MyLong> {
-		long val; int idx;
-		MyLong(long val, int idx) { this.val = val; this.idx = idx; }
-		public int compareTo (MyLong m) {
-			if (val == m.val) return Integer.compare(idx, m.idx);
-			else return Long.compare(val, m.val);
-		}
-	} 
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringTokenizer st;
 	public static void main(String[] args) throws IOException {
@@ -23,23 +15,28 @@ public class Microwaves {
 		TreeSet<Pair> people = new TreeSet<Pair>(); 
 		for (int i = 0; i < m; i ++) people.add(new Pair(readInt(), readInt()));
 
-		TreeSet<MyLong> microwave = new TreeSet<MyLong>();
-		for (int i = 0; i < n; i ++) microwave.add(new MyLong((long)0, i));
-		
-		MyLong temp;
+		TreeMap<Long, Integer> microwave = new TreeMap<Long, Integer>();
+		microwave.put(0L, n);
+
 		for (int i = 0; i < m; i ++) {
-			if (people.first().t - microwave.first().val >= t) { System.out.println(microwave.first().val); System.exit(0); }
-			temp = microwave.floor(new MyLong((long) people.first().t, Integer.MAX_VALUE));
-			if (temp != null) {
-				microwave.remove(temp);
-				microwave.add(new MyLong(Math.max(temp.val, people.first().t) + people.pollFirst().f, i + n));
+			if (people.first().t - microwave.firstKey() >= t) { System.out.println(microwave.firstKey()); System.exit(0); }
+			long temp;
+			if (microwave.floorKey((long)people.first().t) == null) {
+				temp = microwave.firstKey();
+				if (microwave.get(temp) == 1) microwave.remove(temp);
+				else microwave.put(temp, microwave.get(temp) - 1);
+				if (!microwave.containsKey(temp + people.first().f)) microwave.put(temp + people.pollFirst().f, 1);
+				else microwave.put(temp + people.first().f, microwave.get(temp + people.pollFirst().f) + 1);
 			} else {
-				temp = microwave.first();
-				microwave.remove(temp);
-				microwave.add(new MyLong(temp.val + people.pollFirst().f, i + n));
-			}
+				temp = microwave.floorKey((long)people.first().t);
+				if (microwave.get(temp) == 1) microwave.remove(temp);
+				else microwave.put(temp, microwave.get(temp) - 1);
+				if (!microwave.containsKey((long)people.first().t + people.first().f)) microwave.put((long)people.first().t + people.pollFirst().f, 1);
+				else microwave.put((long)people.first().t + people.first().f, microwave.get((long)people.first().t + people.pollFirst().f) + 1);
+			} 
 		}	
-		System.out.println(microwave.first().val);
+		
+		System.out.println(microwave.firstKey());
 	}
 	
 	static String next() throws IOException {
