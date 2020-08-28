@@ -20,7 +20,7 @@ public class ThePolarExpress {
 	
 	static long[] solve (int length, int[] arr) {
 		long[] dp = new long[163]; dp[0] = 1;
-		boolean[] possible = new boolean[163]; 
+		boolean[] possible = new boolean[163]; int prev = 0;
 		for (int i = 1; i <= length; i ++) {
 			for (int j = 162; j >= 0; j --) {
 				if (dp[j] > 0) {
@@ -35,10 +35,14 @@ public class ThePolarExpress {
 							possible[k] = true;
 							dp[k] += dp[j];
 						}
+						if (j == prev) {
+							for (int k = j + arr[i] + 1; k <= j + 9; k ++) dp[k] --;
+						}
 					}
 				}
 			}
 			if (i == 1) possible[0] = true;
+			prev += arr[i];
 		}
 		
 		return dp;
