@@ -19,31 +19,29 @@ public class ThePolarExpress {
 	}
 	
 	static long[] solve (int length, int[] arr) {
-		long[][] dp = new long[length + 1][163]; dp[0][0] = 1; 
-		int[][] possible = new int[length + 1][163]; possible[0][0] = 2;
+		long[] dp = new long[163]; dp[0] = 1;
+		boolean[] possible = new boolean[163]; 
 		for (int i = 1; i <= length; i ++) {
 			for (int j = 162; j >= 0; j --) {
-				if (dp[i - 1][j] > 0) {
-					if (possible[i - 1][j] == 2) {
-						for (int k = j; k < j + arr[i]; k ++) {
-							possible[i][k] = 1;
-							dp[i][k] += dp[i - 1][j]; 
+				if (dp[j] > 0) {
+					if (!possible[j]) {
+						for (int k = j + 1; k < j + arr[i]; k ++) {
+							possible[k] = true;
+							dp[k] += dp[j]; 
 						}
-						if (possible[i][j + arr[i]] == 0) {
-							possible[i][j + arr[i]] = 2;
-							dp[i][j + arr[i]] += dp[i - 1][j]; 
-						} else dp[i][j + arr[i]] += dp[i - 1][j];
+						dp[j + arr[i]] += dp[j]; 
 					} else {
-						for (int k = j; k <= j + 9; k ++) {
-							possible[i][k] = 1;
-							dp[i][k] += dp[i - 1][j];
+						for (int k = j + 1; k <= j + 9; k ++) {
+							possible[k] = true;
+							dp[k] += dp[j];
 						}
 					}
 				}
 			}
+			if (i == 1) possible[0] = true;
 		}
 		
-		return dp[length];
+		return dp;
 	}
 
 	static String next() throws IOException {
