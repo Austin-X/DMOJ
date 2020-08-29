@@ -26,9 +26,8 @@ public class StarstruckSqueeze {
 		
 		int start = -1;
 		for (int i = 0; i < n; i ++) if (jacks[i] != -1) { start = i; break; }
-		if (start == -1) {
-			for (int i = 0; i < k; i ++) System.out.println("dust");
-		} else {
+		if (start == -1) for (int i = 0; i < k; i ++) System.out.println("dust");
+		else {
 			cur = 1; Stack<Integer> s = new Stack<Integer>();
 			for (int i = 0; i < cnt; i ++) System.out.println("dust");
 			for (int i = n - 1; i >= start; i --) {
