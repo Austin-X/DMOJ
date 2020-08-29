@@ -8,35 +8,31 @@ public class StarstruckSqueeze {
 		int n = readInt(), k = readInt(), d = readInt();
 		Queue<Integer> q = new LinkedList<Integer>(); 
 		int cur = 1, prevIdx = 0;
-		boolean[] jacks = new boolean[n]; int[] pieces = new int[n], jackIdx = new int[n]; int idx = 0;
+		int[] jacks = new int[n], pieces = new int[n]; int idx = 0, cnt = 0; Arrays.fill(jacks, -1);
 		for (int i = 0; i < n; i ++) {
 			char option = readCharacter();
-			if (option == 'T') { jacks[i] = true; jackIdx[i] = idx; idx ++; }
+			if (option == 'T') { jacks[i] = idx; idx ++; }
 			else {
 				int x = readInt(); pieces[i] = x;
 				q.add(i);
 				cur *= x;
 				while (!q.isEmpty() && cur > d) {
-					for (int j = prevIdx; j < q.peek(); j ++) {
-						if (jacks[j]) jacks[j] = false;
-					}
+					for (int j = prevIdx; j < q.peek(); j ++) if (jacks[j] != -1) { jacks[j] = -1; cnt ++; }
 					prevIdx = q.peek();
 					cur /= pieces[q.poll()];
 				}
 			}
 		}
 		
-		int start = -1, startIdx = -1;
-		for (int i = 0; i < n; i ++) {
-			if (jacks[i]) { start = jackIdx[i]; startIdx = i; break; }
-		}
+		int start = -1;
+		for (int i = 0; i < n; i ++) if (jacks[i] != -1) { start = i; break; }
 		if (start == -1) {
 			for (int i = 0; i < k; i ++) System.out.println("dust");
 		} else {
 			cur = 1; Stack<Integer> s = new Stack<Integer>();
-			for (int i = 0; i < start; i ++) System.out.println("dust");
-			for (int i = n - 1; i >= startIdx; i --) {
-				if (jacks[i]) s.push(cur);
+			for (int i = 0; i < cnt; i ++) System.out.println("dust");
+			for (int i = n - 1; i >= start; i --) {
+				if (jacks[i] != -1) s.push(cur);
 				else cur *= pieces[i];
 			}
 			while (!s.isEmpty()) System.out.println(s.pop());
