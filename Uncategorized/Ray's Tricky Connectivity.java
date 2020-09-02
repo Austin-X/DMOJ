@@ -14,8 +14,13 @@ public class RaysTrickyConnectivity {
 		vis = new boolean[n + 1]; vis[1] = true;
 		for (int i = 0; i < m; i ++) {
 			int a = readInt(), b = readInt();
-			if (vis[a]) { adj[a].add(b); vis[b] = true; dfs(b); }
-			else adj[a].add(b);
+			if (!vis[a] || !vis[b]) {
+				adj[a].add(b); 
+				if (vis[a]) { 
+					if (!vis[b]) dfs(b);
+					vis[b] = true;  
+				} 
+			}
 		}
 		
 		for (int i = 0; i < q; i ++) {
@@ -23,8 +28,13 @@ public class RaysTrickyConnectivity {
 			if (c == '?') System.out.println(vis[readInt()] ? "YES" : "NO");
 			else {
 				int x = readInt(), y = readInt();
-				if (vis[x]) { adj[x].add(y); vis[y] = true; dfs(y); }
-				else adj[x].add(y);
+				if (!vis[x] || !vis[y]) {
+					adj[x].add(y);  
+					if (vis[x]) { 
+						if (!vis[y]) dfs(y);
+						vis[y] = true;
+					}
+				}
 			}
 		}
 	}
