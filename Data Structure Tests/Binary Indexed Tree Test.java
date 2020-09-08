@@ -2,110 +2,60 @@ import java.io.*;
 import java.util.*;
 
 public class BinaryIndexedTreeTest {
-	static long[] BITree;
-	static int[] freq;
-	
-	static void updateFreq(int index, int val) {
-		while (index <= 100000) {
-			freq[index] += val;
-			index += index & (-index);
-		}
-	}
-	
-	static int q(int val) {
-		int cn = 0;
-		while (val > 0) {
-			cn += freq[val];
-			val -= val & (-val);
-		}
-		return cn;
-	}
-	
-	/* 
-	 * Returns sum of arr[0..index]. This functions assumes that the array is preprocessed
-	 * and partial sums of array elements are stored in BITree[].
-	 */
-	static long getSum(int index) {
-		long sum = 0; // Initialize result
-		
-		// Traverse ancestors of BITree[index];
-		while (index > 0) {
-			// Add current element of BITree to sum.
-			sum += BITree[index];
-			
-			// Move index of parent node in getSum View
-			index -= index & (-index);
-		}
-		return sum;
-	}
-	
-	/* 
-	 * Updates a node in Binary Indexed Tree (BITree) at given index in BITree. The given value 'val'
-	 * is added to BITree[i] and all its ancestors in tree.
-	 */
-	static void updateBIT(int n, int index, int val) {
-		// Index in BITree[] is 1 more than index in arr[].
-		index ++;
-		
-		// Traverse all ancestors and all 'val'
-		while (index <= n) {
-			// Add 'val' to current node of BITree
-			BITree[index] += val;
-			
-			// Update index to that of parent in update View
-			index += index & (-index);
-		}
-	}
-	
-	// Functions to construct Fenwick Tree (BITree) from given array.
-	static void constructBITree(int[] arr, int n) {
-		for (int i = 0; i < n; i ++) {
-			updateBIT(n, i, arr[i]);
-		}
-	}
-	
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static StringTokenizer st;
+	static final int MV = 100000;
 	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		int n = Integer.parseInt(st.nextToken());
-		int m = Integer.parseInt(st.nextToken());
-		
-		int[] arr = new int[n];
-		BITree = new long[n + 1];
-		freq = new int[100001];
-		
-		st = new StringTokenizer(br.readLine());
-		
-		for (int i = 0; i < n; i ++) {
-			arr[i] = Integer.parseInt(st.nextToken());
-			updateFreq(arr[i], 1);
-		}
-		constructBITree(arr, n);
-
-		int x, v;
+		int n = readInt(), m = readInt();
+		long[] sum = new long[n + 1], freq = new long[MV + 1]; int[] arr = new int[n + 1];
+		for (int i = 1; i <= n; i ++) { int x = readInt(); arr[i] = x; updateBITree(i, x, n, sum); updateBITree(x, 1, MV, freq); }
 		for (int i = 0; i < m; i ++) {
-			st = new StringTokenizer(br.readLine());
-			char letter = st.nextToken().charAt(0);
-			
-			if (letter == 'C') {
-				x = Integer.parseInt(st.nextToken()) - 1;
-				v = Integer.parseInt(st.nextToken());
-				
-				updateBIT(n, x, v - arr[x]);
-				updateFreq(arr[x], -1);
-				updateFreq(v, 1);
+			char c = readCharacter();
+			if (c == 'C') {
+				int x = readInt(), v = readInt();
+				updateBITree(x, v - arr[x], n, sum);
+				updateBITree(arr[x], -1, MV, freq);
+				updateBITree(v, 1, MV, freq);
 				arr[x] = v;
-			} else if (letter == 'S') {
-				x = Integer.parseInt(st.nextToken());
-				v = Integer.parseInt(st.nextToken());
-				long high = getSum(v);
-				long low = getSum(x - 1);
-				System.out.println(high - low);
-			} else {
-				v = Integer.parseInt(st.nextToken());
-				System.out.println(q(v));
-			}
+			} else if (c == 'S') System.out.println(-solve(readInt() - 1, sum) + solve(readInt(), sum));
+			else System.out.println(solve(readInt(), freq));
 		}
+	}
+	
+	static void updateBITree(int idx, int val, int max, long[] BITree) {
+		while (idx <= max) {
+			BITree[idx] += val;
+			idx += idx & (-idx);
+		}
+	}
+	
+	static long solve(int idx, long[] BITree) {
+		long ans = 0;
+		while (idx != 0) {
+			ans += BITree[idx];
+			idx -= idx & (-idx);
+		}
+		return ans;
+	}
+	
+	static String next() throws IOException {
+		while (st == null || !st.hasMoreTokens()) 
+			st = new StringTokenizer(br.readLine().trim());
+		return st.nextToken();
+	}
+	static long readLong() throws IOException {
+		return Long.parseLong(next());
+	}
+	static int readInt() throws IOException {
+		return Integer.parseInt(next());
+	}
+	static double readDouble() throws IOException {
+		return Double.parseDouble(next());
+	}
+	static char readCharacter() throws IOException {
+		return next().charAt(0);
+	}
+	static String readLine() throws IOException {
+		return br.readLine().trim();
 	}
 }
