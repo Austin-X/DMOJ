@@ -2,32 +2,44 @@ import java.io.*;
 import java.util.*;
 
 public class AliceThroughTheLookingGlass {
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static StringTokenizer st;
 	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		
-		int T = Integer.parseInt(br.readLine());
-
+		int T = readInt();
 		for (int t = 0; t < T; t ++) {
-			st = new StringTokenizer(br.readLine());
-			int m = Integer.parseInt(st.nextToken());
-			int x = Integer.parseInt(st.nextToken());
-			int y = Integer.parseInt(st.nextToken());
-			
-			if(crystal(x, y, m)) System.out.println("crystal");
-			else System.out.println("empty");
+			int m = readInt(), x = readInt(), y = readInt();
+			System.out.println(recurse(m, x, y) ? "crystal" : "empty");
 		}
 	}
 	
-	static boolean crystal(int x, int y, int m) {
-		int quadrantX = (int)(x / Math.pow(5, m - 1));
-		int quadrantY = (int)(y / Math.pow(5, m - 1));
-		int remX = (int)(x % Math.pow(5, m - 1)), remY = (int)(y % Math.pow(5, m - 1));
+	static boolean recurse(int m, int x, int y) {
+		if (m == 0) return false;
 		
-		if ((quadrantX >= 1 && quadrantX <= 3 && quadrantY == 0) || quadrantX == 2 && quadrantY == 1) return true;
-		else if (quadrantX == 1 && quadrantY == 1 || quadrantX == 3 && quadrantY == 1 || quadrantX == 2 && quadrantY == 2) {
-			return crystal(remX, remY, m - 1);
-		}
-		return false;
-	} 
+		int section = (int) Math.pow(5, m - 1);
+		int quadrantX = x / section + 1, quadrantY = y / section + 1;
+		if (quadrantX == 2 && quadrantY == 1 || quadrantX == 3 && quadrantY == 1 || quadrantX == 3 && quadrantY == 2 || quadrantX == 4 && quadrantY == 1) return true;
+		else if (quadrantX == 2 && quadrantY == 2 || quadrantX == 3 && quadrantY == 3 || quadrantX == 4 && quadrantY == 2) return recurse(m - 1, x - section * (quadrantX - 1), y - section * (quadrantY - 1));
+		else return false;
+	}
+
+	static String next() throws IOException {
+		while (st == null || !st.hasMoreTokens()) 
+			st = new StringTokenizer(br.readLine().trim());
+		return st.nextToken();
+	}
+	static long readLong() throws IOException {
+		return Long.parseLong(next());
+	}
+	static int readInt() throws IOException {
+		return Integer.parseInt(next());
+	}
+	static double readDouble() throws IOException {
+		return Double.parseDouble(next());
+	}
+	static char readCharacter() throws IOException {
+		return next().charAt(0);
+	}
+	static String readLine() throws IOException {
+		return br.readLine().trim();
+	}
 }
