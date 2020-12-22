@@ -8,19 +8,19 @@ public class TooSpooky4Me {
 	public static void main(String[] args) throws IOException {
 		int n = readInt(), l = readInt(), s = readInt();
 		TreeSet<Integer> set = new TreeSet<Integer>();
-		HashMap<Integer, Double> map = new HashMap<Integer, Double>();
+		HashMap<Integer, Long> map = new HashMap<Integer, Long>();
 		
 		for (int i = 0; i < n; i ++) {
-			int a = readInt(), b = readInt(), spook = readInt();
+			int a = readInt(), b = readInt(); long spook = readLong();
 			if (set.contains(a)) {
 				map.put(a, map.get(a) + spook);
 			} else {
-				set.add(a); map.put(a, (double)spook);
+				set.add(a); map.put(a, spook);
 			}
 			if (set.contains(b + 1)) {
 				map.put(b + 1, map.get(b + 1) - spook);
 			} else {
-				set.add(b + 1); map.put(b + 1, -(double)spook);
+				set.add(b + 1); map.put(b + 1, -spook);
 			}
 		}
 		
