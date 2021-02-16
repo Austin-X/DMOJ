@@ -1,20 +1,27 @@
 import java.io.*;
 import java.util.*;
 
-public class TerrificTriangles {
+public class PlayfulPlaydoughs {
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringTokenizer st;
 	public static void main(String[] args) throws IOException {
-		int T = readInt();
+		int n = readInt(), q = readInt();
 		
-		for (int t = 0; t < T; t ++) {
-			long l1 = readInt(), l2 = readInt(), l3 = readInt();
+		long[] freq = new long[(int) (1e5 + 1)];
+		for (int i = 0; i < n; i ++) freq[readInt()] ++;
+		
+		for (int t = 0; t < q; t ++) {
+			int choice = readInt();
 			
-			if (Math.sqrt(l1 * l1 + l2 * l2) == l3 || Math.sqrt(l1 * l1 + l3 * l3) == l2 || Math.sqrt(l2 * l2 + l3 * l3) == l1)
-				System.out.println("R");
-			else if (Math.sqrt(l1 * l1 + l2 * l2) < l3 || Math.sqrt(l1 * l1 + l3 * l3) < l2 || Math.sqrt(l2 * l2 + l3 * l3) < l1)
-				System.out.println("O");
-			else System.out.println("A");
+			if (choice == 1) {
+				int x = readInt();
+				int ceil = (int) Math.ceil((double)x / 2), floor = (int) Math.floor((double)x / 2);
+				freq[ceil] += freq[x];
+				freq[floor] += freq[x];
+				freq[x] = 0;
+			} else {
+				System.out.println(freq[readInt()]);
+			}
 		}
 	}
 
