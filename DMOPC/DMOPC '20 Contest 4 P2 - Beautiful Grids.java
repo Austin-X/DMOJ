@@ -5,6 +5,7 @@ public class BeautifulGrids {
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringTokenizer st;
 
+	@SuppressWarnings("unused")
 	public static void main(String[] args) throws IOException {
 		long n = readLong(), m = readLong();
 		int k = readInt();
