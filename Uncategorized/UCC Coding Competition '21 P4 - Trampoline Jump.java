@@ -14,9 +14,6 @@ public class TrampolineJump {
 		public int compareTo(Pair p) {
 			return Integer.compare(val, p.val);
 		}
-		public String toString() {
-			return idx + " " + val;
-		}
 	}
 	
 	public static void main(String[] args) throws IOException {
