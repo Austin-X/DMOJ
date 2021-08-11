@@ -6,19 +6,14 @@ public class PostfixNotation {
 	static StringTokenizer st;
 	
 	public static void main(String[] args) throws IOException {
-		String[] op2 = {"*", "/", "+", "-", "%", "^"};
-		ArrayList<String> op = new ArrayList<String>(Arrays.asList(op2));
 		String[] arr = readLine().split(" ");
 		
 		Stack<Double> operands = new Stack<Double>();
-		Stack<Character> operators = new Stack<Character>();
 		for (int i = 0; i < arr.length; i ++) {
-			if (op.contains(arr[i])) operators.push(arr[i].charAt(0));
-			else operands.push(Double.valueOf(arr[i]));
-			
-			while (operands.size() >= 2 && !operators.isEmpty()) {
+			if (Character.isDigit(arr[i].charAt(0))) operands.push(Double.valueOf(arr[i]));
+			else {
 				double x = operands.pop(), y = operands.pop();
-				char c = operators.pop();
+				char c = arr[i].charAt(0);
 				switch (c) {
 				  case '*': operands.push(y * x); break;
 				  case '/': operands.push(y / x); break;
