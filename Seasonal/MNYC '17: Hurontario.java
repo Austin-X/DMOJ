@@ -5,7 +5,7 @@ public class Hurontario {
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringTokenizer st;
 	
-	private static final int MOD = (int)(1e9) + 7;
+	private static final int MOD = (int)1e9 + 7;
 	public static void main(String[] args) throws IOException {
 		String a = next(), b = next();
 		int base = 31, best = 0, mx = Math.max(a.length(), b.length());
