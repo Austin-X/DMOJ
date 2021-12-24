@@ -1,9 +1,7 @@
 sectionNum = subsectionNum = subsubsectionNum = 0
 
 for i in range(int(input())):
-   temp = input().split()
-   sectionType = temp[0]
-   title = temp[1]
+   sectionType, title = temp = input().split()
 
    if sectionType == 'section':
       subsectionNum = subsubsectionNum = 0
