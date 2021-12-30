@@ -8,23 +8,33 @@ public class ReplayDoubleIgnition {
 	public static void main(String[] args) throws IOException {
 		int m = readInt(), q = readInt();
 
-		ArrayList<Integer> ans = new ArrayList<Integer>();
-		ans.add(1); ans.add(1);
-		
 		int cur = 1, prev = 1;
+		ArrayList<Character> arr = new ArrayList<Character>();
+		arr.add('1'); arr.add('1');
+		
+		@SuppressWarnings("unchecked")
+		HashSet<Integer>[] vis = new HashSet[m + 1];
+		for (int i = 0; i <= m; i ++) vis[i] = new HashSet<Integer>();
+		vis[1].add(1);
+		
 		while (true) {
-			int x = (cur + prev) % m;
-			for (char c: String.valueOf(x).toCharArray()) ans.add(Character.getNumericValue(c));
-			if (x == 0 && cur == 1) break;
+			int next = (cur + prev) % m;
+			if (vis[cur].contains(next)) {
+				for (int i = 0; i < String.valueOf(cur).length(); i ++) arr.remove(arr.size() - 1);
+				break;
+			}
+			
+			char[] temp = String.valueOf(next).toCharArray();
+			for (char c: temp) arr.add(c);
+			vis[cur].add(next);
 			prev = cur;
-			cur = x;
+			cur = next;
 		}
 		
 		while (q-- > 0) {
-			long n = readLong();
-			int rem = (int) (n % ans.size());
-			if (rem != 0) System.out.println(ans.get(rem - 1));
-			else System.out.println(ans.get(ans.size() - 1));
+			long n = readLong() - 1;
+			n %= arr.size();
+			System.out.println(arr.get((int)n));
 		}
 	}
 
