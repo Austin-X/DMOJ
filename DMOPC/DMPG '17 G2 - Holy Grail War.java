@@ -18,8 +18,10 @@ public class HolyGrailWar {
 		int[] d = new int[n];
 		segTree = new Node[4 * n];
 		for (int i = 0; i < 4 * n; i ++) segTree[i] = new Node(MX, MX, MX, MX);
-		for (int i = 0; i < n; i ++) d[i] = readInt();
-		constructTree(d, 0, n - 1, 0);
+		for (int i = 0; i < n; i ++) { 
+			d[i] = readInt();
+			updateTree(i, 0, n - 1, 0, d[i]);
+		}
 		
 		while (q-- > 0) {
 			char ch = readCharacter();
@@ -28,19 +30,6 @@ public class HolyGrailWar {
 			if (ch == 'S') updateTree(a - 1, 0, n - 1, 0, b);
 			else println(getBest(a - 1, b - 1, 0, n - 1, 0));
 		}
-	}
-	
-	static void constructTree(int[] arr, int low, int high, int pos) {
-		if (low == high) {
-			segTree[pos].update(arr[low], arr[low], arr[low], arr[low]);
-			return;
-		}
-		
-		int mid = (low + high) / 2;
-		constructTree(arr, low, mid, 2 * pos + 1);
-		constructTree(arr, mid + 1, high, 2 * pos + 2);
-		Node c1 = segTree[2 * pos + 1], c2 = segTree[2 * pos + 2];
-		segTree[pos].update(c1.sum + c2.sum, Math.max(c1.prefix, c1.sum + c2.prefix), Math.max(c2.suffix, c2.sum + c1.suffix), Math.max(c1.best, Math.max(c2.best, c1.suffix + c2.prefix)));
 	}
 	
 	static void updateTree(int idx, int low, int high, int pos, int val) {	
