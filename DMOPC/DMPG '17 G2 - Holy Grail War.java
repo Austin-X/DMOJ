@@ -15,20 +15,20 @@ public class HolyGrailWar {
 	
 	public static void main(String[] args) throws IOException {
 		int n = readInt(), q = readInt();
-		int[] d = new int[n];
+		int[] d = new int[n + 1];
 		segTree = new Node[4 * n];
 		for (int i = 0; i < 4 * n; i ++) segTree[i] = new Node(MX, MX, MX, MX);
-		for (int i = 0; i < n; i ++) { 
+		for (int i = 1; i <= n; i ++) { 
 			d[i] = readInt();
-			updateTree(i, 0, n - 1, 0, d[i]);
+			updateTree(i, 1, n, 1, d[i]);
 		}
 		
 		while (q-- > 0) {
 			char ch = readCharacter();
 			int a = readInt(), b = readInt();
 			
-			if (ch == 'S') updateTree(a - 1, 0, n - 1, 0, b);
-			else println(getBest(a - 1, b - 1, 0, n - 1, 0));
+			if (ch == 'S') updateTree(a, 1, n, 1, b);
+			else println(getBest(a, b, 1, n, 1));
 		}
 	}
 	
@@ -39,9 +39,9 @@ public class HolyGrailWar {
 		}
 		
 		int mid = (low + high) / 2;
-		if (idx >= low && idx <= mid) updateTree(idx, low, mid, 2 * pos + 1, val);
-		else updateTree(idx, mid + 1, high, 2 * pos + 2, val);
-		Node c1 = segTree[2 * pos + 1], c2 = segTree[2 * pos + 2];
+		if (idx >= low && idx <= mid) updateTree(idx, low, mid, pos<<1, val);
+		else updateTree(idx, mid + 1, high, pos<<1|1, val);
+		Node c1 = segTree[pos<<1], c2 = segTree[pos<<1|1];
 		segTree[pos].update(c1.sum + c2.sum, Math.max(c1.prefix, c1.sum + c2.prefix), Math.max(c2.suffix, c2.sum + c1.suffix), Math.max(c1.best, Math.max(c2.best, c1.suffix + c2.prefix)));
 	}
 	
@@ -50,22 +50,22 @@ public class HolyGrailWar {
 		else if (l > high || r < low) return MX;
 		int mid = (low + high) / 2;
 		
-		long val1 = getBest(l, r, low, mid, 2 * pos + 1), val2 = getBest(l, r, mid + 1, high, 2 * pos + 2);
+		long val1 = getBest(l, r, low, mid, pos<<1), val2 = getBest(l, r, mid + 1, high, pos<<1|1);
 		if (r <= mid) return val1;
 		else if (l > mid) return val2;
-		else return Math.max(val1, Math.max(val2, getBestSuffix(l, r, low, mid, 2 * pos + 1) + getBestPrefix(l, r, mid + 1, high, 2 * pos + 2)));
+		else return Math.max(val1, Math.max(val2, getBestSuffix(l, r, low, mid, pos<<1) + getBestPrefix(l, r, mid + 1, high, pos<<1|1)));
 	}
 	
 	static long getBestPrefix(int l, int r, int low, int high, int pos) {
 		if (l <= low && r >= high) return segTree[pos].prefix;	
 		int mid = (low + high) / 2;
-		return r <= mid ? getBestPrefix(l, r, low, mid, 2 * pos + 1) : Math.max(getBestPrefix(l, r, low, mid, 2 * pos + 1), segTree[pos * 2 + 1].sum + getBestPrefix(l, r, mid + 1, high, 2 * pos + 2));
+		return r <= mid ? getBestPrefix(l, r, low, mid, pos<<1) : Math.max(getBestPrefix(l, r, low, mid, pos<<1), segTree[pos<<1].sum + getBestPrefix(l, r, mid + 1, high, pos<<1|1));
 	}
 	
 	static long getBestSuffix(int l, int r, int low, int high, int pos) {
 		if (l <= low && r >= high) return segTree[pos].suffix;
 		int mid = (low + high) / 2;
-		return l > mid ? getBestSuffix(l, r, mid + 1, high, 2 * pos + 2) : Math.max(getBestSuffix(l, r, mid + 1, high, 2 * pos + 2), segTree[pos * 2 + 2].sum + getBestSuffix(l, r, low, mid, 2 * pos + 1));
+		return l > mid ? getBestSuffix(l, r, mid + 1, high, pos<<1|1) : Math.max(getBestSuffix(l, r, mid + 1, high, pos<<1|1), segTree[pos<<1|1].sum + getBestSuffix(l, r, low, mid, pos<<1));
 	}
 
 	static String next() throws IOException {
