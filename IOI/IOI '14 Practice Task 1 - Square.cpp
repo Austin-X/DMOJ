@@ -6,9 +6,9 @@ using namespace std;
 typedef long long ll;
 
 const int MX_N = 1e3;
-static int psa[MX_N][MX_N];
+static int psa[MX_N + 1][MX_N + 1];
 
-int works(int n, int size) {
+int compute(int n, int size) {
     int cnt = 0;
     for (int i = 1; i <= n - size + 1; i ++) {
         for (int j = 1; j <= n - size + 1; j ++) {
@@ -35,12 +35,12 @@ int main() {
     int lo = 0, hi = n, cnt;
     while (lo <= hi) {
         int mid = (lo + hi) >> 1;
-        cnt = works(n, mid);
+        cnt = compute(n, mid);
         if (cnt) lo = mid + 1;
         else hi = mid - 1;
     }
 
-    cnt = works(n, hi);
+    cnt = compute(n, hi);
     cout << hi * cnt << '\n';
     return 0;
 }
