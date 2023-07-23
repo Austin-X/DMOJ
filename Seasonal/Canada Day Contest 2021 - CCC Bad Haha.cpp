@@ -8,17 +8,16 @@ void solve() {
     string n;
     int k;
     cin >> n >> k;
-    vector<int> bg, ed;
+    vector<char> bg, ed;
     for (char c: n) {
-        int d = c - '0';
-        while (k && !bg.empty() && d < bg.back()) { k --; ed.push_back(bg.back()); bg.pop_back(); }
-        bg.push_back(d);
+        while (k && !bg.empty() && c < bg.back()) { k --; ed.push_back(bg.back()); bg.pop_back(); }
+        bg.push_back(c);
     }
     while (k && !bg.empty()) { k --; ed.push_back(bg.back()); bg.pop_back(); }
 
     sort(ed.begin(), ed.end());
-    for (int x: bg) cout << x;
-    for (int x: ed) cout << x;
+    for (char x: bg) cout << x;
+    for (char x: ed) cout << x;
     cout << '\n';
 }
 
