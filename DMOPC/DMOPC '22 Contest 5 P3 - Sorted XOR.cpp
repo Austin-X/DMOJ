@@ -4,7 +4,8 @@
 using namespace std;
 typedef long long ll;
 
-bool canFlip[31];
+const int MPOW = 30;
+bool canFlip[MPOW + 1];
 
 void solve() {
     int n, ans = 0, x;
@@ -16,22 +17,19 @@ void solve() {
     rep(i, 1, n) {
         cin >> x;
         b[i] = b[i - 1] ^ x;
+
+        int diffIdx = -1;
+        for (int j = MPOW; j >= 0; j --) if ((b[i] & (1 << j)) != (b[i - 1] & (1 << j))) { diffIdx = j; break; }
+
         if (b[i] < b[i - 1]) {
-            for (int j = 30; j >= 0; j --) {
-                if ((b[i] & (1 << j)) != (b[i - 1] & (1 << j))) {
-                    if (canFlip[j]) {
-                        canFlip[j] = false;
-                        b[i] = b[i] ^ (1 << j);
-                    } else {
-                        ans ++;
-                        fill(canFlip, canFlip + 31, true);
-                    }
-                    break;
-                }
+            if (canFlip[diffIdx]) {
+                canFlip[diffIdx] = false;
+                b[i] = b[i] ^ (1 << diffIdx);
+            } else {
+                ans ++;
+                fill(canFlip, canFlip + MPOW + 1, true);
             }
-        } else {
-            for (int j = 30; j >= 0; j --) if ((b[i] & (1 << j)) != (b[i - 1] & (1 << j))) { canFlip[j] = false; break; }
-        }
+        } else if (diffIdx != -1) canFlip[diffIdx] = false;
     }
 
     cout << ans << '\n';
