@@ -17,12 +17,11 @@ void solve() {
         double dis = d[i + 1] - d[i];
         if (dis <= k) d[i + 1] += min(ans, (d[i] + k) - d[i + 1]);
         else {
-            double diff = min(ans, dis - k);
-            d[i + 1] -= diff;
-            if (d[i + 1] - d[i] > k) {
-                diff = (d[i + 1] - d[i] - k) / 2;
-                ans += diff;
-                d[i + 1] -= diff;
+            if (ans >= dis - k) d[i + 1] -= dis - k;
+            else {
+                d[i + 1] -= ans;
+                double time = max(0.0, (d[i + 1] - d[i] - k) / 2);
+                ans += time; d[i + 1] -= time;
             }
         }
     }
