@@ -13,7 +13,7 @@ typedef long long ll;
 void solve() {
     int n;
     cin >> n;
-    int p[n];
+    int p[n + 1];
     rep(i, 1, n) cin >> p[i];
 
     if (n == 1) cout << "1 1";
