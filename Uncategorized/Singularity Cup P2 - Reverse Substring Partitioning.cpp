@@ -12,9 +12,8 @@ typedef long long ll;
 
 void solve() {
     int n;
-    cin >> n;
     string s;
-    cin >> s;
+    cin >> n >> s;
     s = " " + s;
     
     int contiguousMatchingSubsequences = 1;
